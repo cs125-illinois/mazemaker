@@ -36,6 +36,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
+// TODO: Auto-generated Javadoc
 /**
  * Zen library.
  */
@@ -809,7 +810,13 @@ public class Zen extends JApplet {
      */
 
     class ZenInstance {
-        private final int MOUSE_WAIT_LENGTH_MS = 250;
+
+        /** The mouse wait length ms. */
+        private static final int MOUSE_WAIT_LENGTH_MS = 250;
+
+        /**
+         * Wait for click.
+         */
         public void waitForClick() {
             long t = mouseClickTime;
             // Todo: remove polling and use synchronization wait lock
@@ -818,66 +825,143 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Gets the zen width.
+         *
+         * @return the zen width
+         */
         public int getZenWidth() {
             return bufferSize.width;
         }
 
+        /**
+         * Gets the zen height.
+         *
+         * @return the zen height
+         */
         public int getZenHeight() {
             return bufferSize.height;
         }
 
+        /**
+         * Gets the mouse click X.
+         *
+         * @return the mouse click X
+         */
         public int getMouseClickX() {
             return mouseClickX;
         }
 
+        /**
+         * Gets the mouse click Y.
+         *
+         * @return the mouse click Y
+         */
         public int getMouseClickY() {
             return mouseClickY;
         }
 
+        /**
+         * Gets the mouse click time.
+         *
+         * @return the mouse click time
+         */
         public long getMouseClickTime() {
             return mouseClickTime;
         }
 
+        /**
+         * Sets the edits the text.
+         *
+         * @param s the new edits the text
+         */
         public void setEditText(final String s) {
             editText = new StringBuilder(s);
         }
 
+        /**
+         * Gets the edits the text.
+         *
+         * @return the edits the text
+         */
         public String getEditText() {
             return editText.toString();
         }
 
+        /**
+         * Gets the mouse buttons and modifier keys.
+         *
+         * @return the mouse buttons and modifier keys
+         */
         public int getMouseButtonsAndModifierKeys() {
             return mouseButtonsAndModifierKeys;
         }
 
+        /**
+         * Gets the mouse X.
+         *
+         * @return the mouse X
+         */
         public int getMouseX() {
             return mouseX;
         }
 
+        /**
+         * Gets the mouse Y.
+         *
+         * @return the mouse Y
+         */
         public int getMouseY() {
             return mouseY;
         }
 
+        /**
+         * Checks if is mouse clicked.
+         *
+         * @return true, if is mouse clicked
+         */
         public boolean isMouseClicked() {
             return isMouseClicked;
         }
 
+        /**
+         * Checks if is key pressed.
+         *
+         * @param key the key
+         * @return true, if is key pressed
+         */
         public boolean isKeyPressed(final char key) {
             return key >= 0 && key < keyPressed.length
                     ? keyPressed[key]
                     : false;
         }
 
+        /**
+         * Checks if is virtual key pressed.
+         *
+         * @param keyCode the key code
+         * @return true, if is virtual key pressed
+         */
         public boolean isVirtualKeyPressed(final int keyCode) {
             return keyCode >= 0 && keyCode < virtualKeyPressed.length
                     ? virtualKeyPressed[keyCode]
                     : false;
         }
 
+        /**
+         * Checks if is running.
+         *
+         * @return true, if is running
+         */
         public boolean isRunning() {
             return isRunning;
         }
 
+        /**
+         * Gets the buffer graphics.
+         *
+         * @return the buffer graphics
+         */
         public Graphics2D getBufferGraphics() {
             // getSingleton(); // ensure instance created
             while (g == null) {
@@ -889,6 +973,13 @@ public class Zen extends JApplet {
             return g;
         }
 
+        /**
+         * Draw image.
+         *
+         * @param filename the filename
+         * @param x the x
+         * @param y the y
+         */
         public void drawImage(final String filename, final int x, final int y) {
             Graphics2D g = getBufferGraphics();
             Image img = getCachedImage(filename);
@@ -902,6 +993,14 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Draw line.
+         *
+         * @param x1 the x 1
+         * @param y1 the y 1
+         * @param x2 the x 2
+         * @param y2 the y 2
+         */
         public void drawLine(final int x1, final int y1, final int x2,
                 final int y2) {
             getBufferGraphics().drawLine(x1, y1, x2, y2);
@@ -910,6 +1009,13 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Draw text.
+         *
+         * @param text the text
+         * @param x the x
+         * @param y the y
+         */
         public void drawText(final String text, final int x, final int y) {
             getBufferGraphics().drawString(text, x, y);
             if (paintImmediately) {
@@ -917,6 +1023,12 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Draw polygon.
+         *
+         * @param x the x
+         * @param y the y
+         */
         public void drawPolygon(final int[] x, final int[] y) {
             getBufferGraphics().drawPolygon(x, y, x.length);
             if (paintImmediately) {
@@ -924,6 +1036,16 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Draw arc.
+         *
+         * @param x the x
+         * @param y the y
+         * @param width the width
+         * @param height the height
+         * @param startAngle the start angle
+         * @param arcAngle the arc angle
+         */
         public void drawArc(final int x, final int y, final int width,
                 final int height, final int startAngle, final int arcAngle) {
             getBufferGraphics().drawArc(x, y, width, height, startAngle,
@@ -933,6 +1055,14 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Fill oval.
+         *
+         * @param minX the min X
+         * @param minY the min Y
+         * @param width the width
+         * @param height the height
+         */
         public void fillOval(final int minX, final int minY, final int width,
                 final int height) {
             getBufferGraphics().fillOval(minX, minY, width, height);
@@ -941,6 +1071,14 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Fill rect.
+         *
+         * @param x1 the x 1
+         * @param y1 the y 1
+         * @param width the width
+         * @param height the height
+         */
         public void fillRect(final int x1, final int y1, final int width,
                 final int height) {
             getBufferGraphics().fillRect(x1, y1, width, height);
@@ -949,6 +1087,12 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Fill polygon.
+         *
+         * @param x the x
+         * @param y the y
+         */
         public void fillPolygon(final int[] x, final int[] y) {
             getBufferGraphics().fillPolygon(x, y, x.length);
             if (paintImmediately) {
@@ -956,18 +1100,37 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Sets the color.
+         *
+         * @param red the red
+         * @param green the green
+         * @param blue the blue
+         */
         public void setColor(final int red, final int green, final int blue) {
             currentColor = new Color(bound(red, 0, 255), bound(green, 0, 255),
                     bound(blue, 0, 255));
             getBufferGraphics().setColor(currentColor);
         }
 
+        /**
+         * Sets the font.
+         *
+         * @param font the font
+         * @return the font
+         */
         public Font setFont(final String font) {
             currentFont = Font.decode(font);
             getBufferGraphics().setFont(currentFont);
             return currentFont;
         }
 
+        /**
+         * Gets the cached image.
+         *
+         * @param filename the filename
+         * @return the cached image
+         */
         public Image getCachedImage(final String filename) {
             Image img = nameToImage.get("../" + filename);
             if (img != null) {
@@ -987,6 +1150,9 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Flip buffer.
+         */
         public void flipBuffer() {
             // Both flipBuffer and portions of paint() are synchronized
             // on the class object to ensure
@@ -1013,6 +1179,13 @@ public class Zen extends JApplet {
             }
         }
 
+        /**
+         * Creates the buffers.
+         *
+         * @param width the width
+         * @param height the height
+         * @param passedOptions the passed options
+         */
         void createBuffers(final int width, final int height,
                 final String passedOptions) {
             if (g != null) {
