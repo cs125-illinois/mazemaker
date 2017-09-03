@@ -8,11 +8,11 @@ public abstract class ZenSprite extends Point {
         super();
     }
 
-    public ZenSprite(int x, int y) {
+    public ZenSprite(final int x, final int y) {
         super(x, y);
     }
 
-    public ZenSprite(double x, double y) {
+    public ZenSprite(final double x, final double y) {
         super(x, y);
     }
 
@@ -22,15 +22,16 @@ public abstract class ZenSprite extends Point {
     /**
      * Returns the distance between this sprite and another sprite.
      */
-    public double distanceTo(ZenSprite other) {
-        return Math.sqrt(Math.pow(this.rawX() - other.rawX(), 2) + Math.pow(this.rawY() - other.rawY(), 2));
+    public double distanceTo(final ZenSprite other) {
+        return Math.sqrt(Math.pow(this.rawX() - other.rawX(), 2)
+                + Math.pow(this.rawY() - other.rawY(), 2));
     }
 
-    public int getLayer() {
+    public final int getLayer() {
         return layer;
     }
 
-    public void setLayer(int layer) {
+    public final void setLayer(final int layer) {
         this.layer = layer;
     }
 }

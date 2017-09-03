@@ -4,43 +4,44 @@ public class Text extends ZenShape {
     private String text, font;
     private int size;
 
-    public Text(String text) {
+    public Text(final String text) {
         this("Helvetica", text, 16, "black");
     }
 
-    public Text(String text, String color) {
+    public Text(final String text, final String color) {
         this("Helvetica", text, 16, color);
     }
 
-    public Text(String font, String text, String color) {
+    public Text(final String font, final String text, final String color) {
         this(font, text, 16, color);
     }
 
-    public Text(String text, int size) {
+    public Text(final String text, final int size) {
         this("Helvetica", text, size, "black");
     }
 
-    public Text(String font, String text, int size, String color) {
+    public Text(final String font, final String text, final int size,
+            final String color) {
         this.font = font;
         this.text = text;
         this.size = size;
         setColor(color);
     }
 
-    public void setText(String text) {
+    public final void setText(final String text) {
         this.text = text;
     }
 
-    public void setFont(String font) {
+    public final void setFont(final String font) {
         this.font = font;
     }
 
-    public void setSize(int size) {
+    public final void setSize(final int size) {
         this.size = size;
     }
 
     @Override
-    public void draw() {
+    public final void draw() {
         Zen.setFont(font, size);
         Zen.drawText(this.text, getX(), getY());
     }

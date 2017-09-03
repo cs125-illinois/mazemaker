@@ -7,27 +7,28 @@ public abstract class ZenShape extends Point {
         super(0, 0);
     }
 
-    public ZenShape(int x, int y) {
+    public ZenShape(final int x, final int y) {
         super(x, y);
     }
 
-    public ZenShape(double x, double y) {
+    public ZenShape(final double x, final double y) {
         super(x, y);
     }
 
     public abstract void draw();
 
-    public void colorAndDraw() {
-        if (color != null)
+    public final void colorAndDraw() {
+        if (color != null) {
             Zen.setColor(color);
+        }
         this.draw();
     }
 
-    public void setColor(String color) {
+    public final void setColor(final String color) {
         this.color = color;
     }
 
-    public String getColor() {
+    public final String getColor() {
         return color;
     }
 }

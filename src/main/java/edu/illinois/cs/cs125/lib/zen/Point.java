@@ -1,14 +1,14 @@
 package edu.illinois.cs.cs125.lib.zen;
 
 /**
- * A Point is a precise point in 2D space. It uses doubles to store precise values for the x and y coordinate, and
- * casts them to integers for use in the graphic systems integer plane. This allows for more complex transformations
- * like rotating and scaling to take place.
+ * A Point is a precise point in 2D space.
  *
- * @author keshav
+ * It uses doubles to store precise values for the x and y coordinate, and casts
+ * them to integers for use in the graphic systems integer plane. This allows
+ * for more complex transformations like rotating and scaling to take place.
  */
 public class Point {
-    private double x, y;        // The x, y coordinate of this point
+    private double x, y; // The x, y coordinate of this point
 
     /**
      * Empty constructor, initializes to the point 0, 0.
@@ -20,7 +20,7 @@ public class Point {
     /**
      * Integer value constructor.
      */
-    public Point(int x, int y) {
+    public Point(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
@@ -28,7 +28,7 @@ public class Point {
     /**
      * Precise value constructor.
      */
-    public Point(double x, double y) {
+    public Point(final double x, final double y) {
         this.x = x;
         this.y = y;
     }
@@ -36,7 +36,7 @@ public class Point {
     /**
      * Set the position to a new (x, y) coordinate.
      */
-    public void set(int x, int y) {
+    public void set(final int x, final int y) {
         setX(x);
         setY(y);
     }
@@ -44,7 +44,7 @@ public class Point {
     /**
      * Set the position to a new (x, y) coordinate.
      */
-    public void set(double x, double y) {
+    public void set(final double x, final double y) {
         setX(x);
         setY(y);
     }
@@ -52,7 +52,7 @@ public class Point {
     /**
      * Change the position in the x direction by dx, and the y direction by dy.
      */
-    public void change(int dx, int dy) {
+    public void change(final int dx, final int dy) {
         changeX(dx);
         changeY(dy);
     }
@@ -60,7 +60,7 @@ public class Point {
     /**
      * Change the position in the x direction by dx, and the y direction by dy.
      */
-    public void change(double dx, double dy) {
+    public void change(final double dx, final double dy) {
         changeX(dx);
         changeY(dy);
     }
@@ -82,28 +82,28 @@ public class Point {
     /**
      * Sets the x position to the specified value.
      */
-    public void setX(int x) {
+    public void setX(final int x) {
         this.x = x;
     }
 
     /**
      * Sets the x position to the specified value.
      */
-    public void setX(double x) {
+    public void setX(final double x) {
         this.x = x;
     }
 
     /**
      * Changes the x position by the given amount.
      */
-    public void changeX(int amount) {
+    public void changeX(final int amount) {
         this.x += amount;
     }
 
     /**
      * Changes the x position by the given amount.
      */
-    public void changeX(double amount) {
+    public void changeX(final double amount) {
         this.x += amount;
     }
 
@@ -124,52 +124,56 @@ public class Point {
     /**
      * Sets the y position to the specified value.
      */
-    public void setY(int y) {
+    public void setY(final int y) {
         this.y = y;
     }
 
     /**
      * Sets the y position to the specified value.
      */
-    public void setY(double y) {
+    public void setY(final double y) {
         this.y = y;
     }
 
     /**
      * Changes the y position by the given amount.
      */
-    public void changeY(int amount) {
+    public void changeY(final int amount) {
         this.y += amount;
     }
 
     /**
      * Changes the y position by the given amount.
      */
-    public void changeY(double amount) {
+    public void changeY(final double amount) {
         this.y += amount;
     }
 
     /**
      * Returns the distance between this point and another point.
      */
-    public double distanceTo(Point other) {
-        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+    public double distanceTo(final Point other) {
+        return Math.sqrt(
+                Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
     }
 
     /**
      * Returns the angle formed by the line from this point to another point.
      */
-    public double angleTo(Point other) {
+    public double angleTo(final Point other) {
         double dy = other.y - this.y;
         double dx = other.x - this.x;
-        return  ((dx != 0) ? Math.atan(dy / dx) + ((dx < 0) ? Math.PI : ((dy < 0) ? 2 * Math.PI : 0)) :
-                ((dx > 0) ? Math.PI / 2 : -Math.PI / 2));
+        return ((dx != 0)
+                ? Math.atan(dy / dx)
+                        + ((dx < 0) ? Math.PI : ((dy < 0) ? 2 * Math.PI : 0))
+                : ((dx > 0) ? Math.PI / 2 : -Math.PI / 2));
     }
 
     /**
-     * Returns whether this point represents the same 2D coordinate as another point.
+     * Returns whether this point represents the same 2D coordinate as another
+     * point.
      */
-    public boolean equals(Point other) {
+    public boolean equals(final Point other) {
         return this.x == other.x && this.y == other.y;
     }
 
