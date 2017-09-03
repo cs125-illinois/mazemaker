@@ -42,44 +42,61 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 /**
- * This is the core Zen library, heavily modified from the original by Lawrence
- * Angrave of the University of Illinois at Urbana Champaign. Once I find his
- * original license, I'll add it here.
- *
- * @author angrave
+ * Zen library.
  */
-
 @SuppressWarnings("serial")
 public class Zen extends JApplet {
 
-    private static Firebase fb;
-    private static boolean fb_connected = false;
+    /** The Firebase instance. */
+    private static Firebase myFirebase;
+
+    /** Is a Firebase instance connected? */
+    private static boolean firebaseConnected = false;
+
+    /** Private Firebase data. */
     private static Map<String, String> data;
 
+    /** The Constant FIREBASE_SLEEP_LENGTH. */
+    private static final int FIREBASE_SLEEP_LENGTH = 100;
+
+    /**
+     * Connect.
+     *
+     * @param firebase the firebase
+     */
     public static void connect(final String firebase) {
         Zen.connect(firebase, true);
     }
 
+    /**
+     * Connect.
+     *
+     * @param firebase the firebase
+     * @param block the block
+     */
     public static void connect(final String firebase, final boolean block) {
-        fb = new Firebase("https://" + firebase + ".firebaseio.com");
+        myFirebase = new Firebase("https://" + firebase + ".firebaseio.com");
         data = new HashMap<String, String>();
-        fb.addValueEventListener(new ValueEventListener() {
+        myFirebase.addValueEventListener(new ValueEventListener() {
             @SuppressWarnings("unchecked")
             @Override
             public void onDataChange(final DataSnapshot snap) {
-                fb_connected = true;
-                if (snap.getValue() != null) {
-                    try {
-                        synchronized (data) {
-                            Map<String, Object> snapData = (Map<String, Object>) snap
-                                    .getValue();
-                            for (Map.Entry<String, Object> entry : snapData
-                                    .entrySet())
-                                data.put(entry.getKey().toString(),
-                                        entry.getValue().toString());
+                firebaseConnected = true;
+                if (snap.getValue() == null) {
+                    return;
+                }
+
+                try {
+                    synchronized (data) {
+                        Map<String, Object> snapData =
+                                (Map<String, Object>) snap.getValue();
+                        for (Map.Entry<String, Object> entry
+                                : snapData.entrySet()) {
+                            data.put(entry.getKey().toString(),
+                                    entry.getValue().toString());
                         }
-                    } catch (ClassCastException e) {
                     }
+                } catch (ClassCastException e) {
                 }
             }
 
@@ -89,39 +106,80 @@ public class Zen extends JApplet {
         });
 
         while (!Zen.connected()) {
-            Zen.sleep(100);
+            Zen.sleep(FIREBASE_SLEEP_LENGTH);
         }
     }
 
+    /**
+     * Connected.
+     *
+     * @return true, if successful
+     */
     public static boolean connected() {
-        return fb_connected;
+        return firebaseConnected;
     }
 
+    /**
+     * Write.
+     *
+     * @param key the key
+     * @param value the value
+     */
     public static void write(final String key, final boolean value) {
         data.put(key, "" + value);
-        fb.child(key).setValue(value);
+        myFirebase.child(key).setValue(value);
     }
 
+    /**
+     * Write.
+     *
+     * @param key the key
+     * @param value the value
+     */
     public static void write(final String key, final int value) {
         data.put(key, "" + value);
-        fb.child(key).setValue(value);
+        myFirebase.child(key).setValue(value);
     }
 
+    /**
+     * Write.
+     *
+     * @param key the key
+     * @param value the value
+     */
     public static void write(final String key, final double value) {
         data.put(key, "" + value);
-        fb.child(key).setValue(value);
+        myFirebase.child(key).setValue(value);
     }
 
+    /**
+     * Write.
+     *
+     * @param key the key
+     * @param value the value
+     */
     public static void write(final String key, final long value) {
         data.put(key, "" + value);
-        fb.child(key).setValue(value);
+        myFirebase.child(key).setValue(value);
     }
 
+    /**
+     * Write.
+     *
+     * @param key the key
+     * @param value the value
+     */
     public static void write(final String key, final String value) {
         data.put(key, value);
-        fb.child(key).setValue(value);
+        myFirebase.child(key).setValue(value);
     }
 
+    /**
+     * Read boolean.
+     *
+     * @param key the key
+     * @return true, if successful
+     */
     public static boolean readBoolean(final String key) {
         String str = Zen.read(key);
         if (str != null) {
@@ -130,6 +188,12 @@ public class Zen extends JApplet {
         return false;
     }
 
+    /**
+     * Read int.
+     *
+     * @param key the key
+     * @return the int
+     */
     public static int readInt(final String key) {
         String str = Zen.read(key);
         if (str != null) {
@@ -138,6 +202,12 @@ public class Zen extends JApplet {
         return 0;
     }
 
+    /**
+     * Read long.
+     *
+     * @param key the key
+     * @return the long
+     */
     public static long readLong(final String key) {
         String str = Zen.read(key);
         if (str != null) {
@@ -146,6 +216,12 @@ public class Zen extends JApplet {
         return 0;
     }
 
+    /**
+     * Read double.
+     *
+     * @param key the key
+     * @return the double
+     */
     public static double readDouble(final String key) {
         String str = Zen.read(key);
         if (str != null) {
@@ -154,6 +230,12 @@ public class Zen extends JApplet {
         return 0;
     }
 
+    /**
+     * Read.
+     *
+     * @param key the key
+     * @return the string
+     */
     public static String read(final String key) {
         synchronized (data) {
             if (data.containsKey(key)) {
@@ -164,28 +246,61 @@ public class Zen extends JApplet {
         }
     }
 
+    /** The Constant DEFAULT_SIZE. */
     public static final Dimension DEFAULT_SIZE = new Dimension(640, 480);
+
+    /** The Constant DEFAULT_OPTIONS. */
     public static final String DEFAULT_OPTIONS = "";
+
+    /** The Constant VERBOSE. */
     protected static final boolean VERBOSE = false;
 
+    /** The menu initialized. */
     private static boolean initialized = false, menuInitialized = false;
+
+    /** The key map. */
     private static Map<String, Integer> keyMap;
+
+    /** The color map. */
     private static Map<String, Integer> colorMap;
+
+    /** The action map. */
     private static Map<String, Map<String, String>> actionMap;
+
+    /** The action queue. */
     private static ArrayList<String> actionQueue;
-    private static int width, height;
+
+    /** The width. */
+    private static int myWidth, myHeight;
+
+    /** The window name. */
     private static String windowName;
 
+    /**
+     * Creates the.
+     *
+     * @param width the width
+     * @param height the height
+     * @return the zen instance
+     */
     public static ZenInstance create(final int width, final int height) {
         return create(width, height, "");
     }
 
+    /**
+     * Creates the.
+     *
+     * @param width the width
+     * @param height the height
+     * @param options the options
+     * @return the zen instance
+     */
     public static ZenInstance create(final int width, final int height,
             final String options) {
         if (!initialized) {
             initialize();
-            Zen.width = width;
-            Zen.height = height;
+            Zen.myWidth = width;
+            Zen.myHeight = height;
         }
         if (!mustBeAnWebApplet) {
             mustBeAnApplication = true;
@@ -193,8 +308,12 @@ public class Zen extends JApplet {
         synchronized (Zen.class) {
             ZenInstance instance = instanceMap.get();
             if (instance == null) { // no instance set for this thread
-                JFrame frame = new JFrame(
-                        (Zen.windowName != null) ? Zen.windowName : "Zen");
+                JFrame frame;
+                if (Zen.windowName != null) {
+                    frame = new JFrame(Zen.windowName);
+                } else {
+                    frame = new JFrame("Zen");
+                }
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 if (Zen.menuInitialized) {
                     frame.setJMenuBar(Zen.generateMenuBar());
@@ -220,6 +339,11 @@ public class Zen extends JApplet {
         }
     }
 
+    /**
+     * Generate menu bar.
+     *
+     * @return the j menu bar
+     */
     private static JMenuBar generateMenuBar() {
         JMenuBar bar = new JMenuBar();
         for (Map.Entry<String, Map<String, String>> actionMenu : actionMap
@@ -241,10 +365,20 @@ public class Zen extends JApplet {
         return bar;
     }
 
+    /**
+     * Checks for action.
+     *
+     * @return true, if successful
+     */
     public static boolean hasAction() {
         return Zen.actionQueue.size() > 0;
     }
 
+    /**
+     * Gets the action.
+     *
+     * @return the action
+     */
     public static String getAction() {
         if (Zen.actionQueue.size() > 0) {
             return Zen.actionQueue.remove(0);
@@ -253,10 +387,22 @@ public class Zen extends JApplet {
         }
     }
 
+    /**
+     * Push action.
+     *
+     * @param action the action
+     */
     public static void pushAction(final String action) {
         Zen.actionQueue.add(action);
     }
 
+    /**
+     * Menu.
+     *
+     * @param menu the menu
+     * @param name the name
+     * @param action the action
+     */
     public static void menu(final String menu, final String name,
             final String action) {
         if (!menuInitialized) {
@@ -272,6 +418,9 @@ public class Zen extends JApplet {
         }
     }
 
+    /**
+     * Initialize.
+     */
     private static void initialize() {
         keyMap = new HashMap<String, Integer>();
         keyMap.put("space", KeyEvent.VK_SPACE);
@@ -430,64 +579,140 @@ public class Zen extends JApplet {
         addColor("yellow green", 154, 205, 50);
     }
 
+    /**
+     * Adds the color.
+     *
+     * @param name the name
+     * @param red the red
+     * @param green the green
+     * @param blue the blue
+     */
     public static void addColor(final String name, final int red,
             final int green, final int blue) {
         colorMap.put(name, ((red & 0x0ff) << 16) | ((green & 0x0ff) << 8)
                 | (blue & 0x0ff));
     }
 
+    /**
+     * Sets the window name.
+     *
+     * @param name the new window name
+     */
     public static void setWindowName(final String name) {
         Zen.windowName = name;
     }
 
+    /**
+     * Gets the about message.
+     *
+     * @return the about message
+     */
     public static String getAboutMessage() {
         return "Zen Graphics (version 0.1) Copyright Lawrence Angrave, 2010";
     }
 
+    /**
+     * Wait for click.
+     */
     public static void waitForClick() {
         getInstanceFromThread().waitForClick();
     }
 
+    /**
+     * Gets the zen width.
+     *
+     * @return the zen width
+     */
     public static int getZenWidth() {
         return getInstanceFromThread().getZenWidth();
     }
 
+    /**
+     * Gets the zen height.
+     *
+     * @return the zen height
+     */
     public static int getZenHeight() {
         return getInstanceFromThread().getZenHeight();
     }
 
+    /**
+     * Gets the mouse click X.
+     *
+     * @return the mouse click X
+     */
     public static int getMouseClickX() {
         return getInstanceFromThread().getMouseClickX();
     }
 
+    /**
+     * Gets the mouse click Y.
+     *
+     * @return the mouse click Y
+     */
     public static int getMouseClickY() {
         return getInstanceFromThread().getMouseClickY();
     }
 
+    /**
+     * Gets the mouse click time.
+     *
+     * @return the mouse click time
+     */
     public static long getMouseClickTime() {
         return getInstanceFromThread().getMouseClickTime();
     }
 
+    /**
+     * Sets the edits the text.
+     *
+     * @param s the new edits the text
+     */
     public static void setEditText(final String s) {
         getInstanceFromThread().setEditText(s);
     }
 
+    /**
+     * Gets the edits the text.
+     *
+     * @return the edits the text
+     */
     public static String getEditText() {
         return getInstanceFromThread().getEditText();
     }
 
+    /**
+     * Gets the mouse buttons and modifier keys.
+     *
+     * @return the mouse buttons and modifier keys
+     */
     public static int getMouseButtonsAndModifierKeys() {
         return getInstanceFromThread().getMouseButtonsAndModifierKeys();
     }
 
+    /**
+     * Gets the mouse X.
+     *
+     * @return the mouse X
+     */
     public static int getMouseX() {
         return getInstanceFromThread().getMouseX();
     }
 
+    /**
+     * Gets the mouse Y.
+     *
+     * @return the mouse Y
+     */
     public static int getMouseY() {
         return getInstanceFromThread().getMouseY();
     }
 
+    /**
+     * Sleep.
+     *
+     * @param milliseconds the milliseconds
+     */
     public static void sleep(final int milliseconds) {
         try {
             Thread.sleep(milliseconds);
@@ -495,6 +720,12 @@ public class Zen extends JApplet {
         }
     }
 
+    /**
+     * Checks if is key pressed.
+     *
+     * @param key the key
+     * @return true, if is key pressed
+     */
     public static boolean isKeyPressed(final String key) {
         if (key == null) {
             return false;
@@ -506,72 +737,169 @@ public class Zen extends JApplet {
         return false;
     }
 
+    /**
+     * Checks if is key pressed.
+     *
+     * @param key the key
+     * @return true, if is key pressed
+     */
     private static boolean isKeyPressed(final char key) {
         return getInstanceFromThread().isKeyPressed(key);
     }
 
+    /**
+     * Checks if is virtual key pressed.
+     *
+     * @param keyCode the key code
+     * @return true, if is virtual key pressed
+     */
     public static boolean isVirtualKeyPressed(final int keyCode) {
         return getInstanceFromThread().isVirtualKeyPressed(keyCode);
     }
 
+    /**
+     * Checks if is running.
+     *
+     * @return true, if is running
+     */
     public static boolean isRunning() {
         return getInstanceFromThread().isRunning();
     }
 
+    /**
+     * Gets the buffer graphics.
+     *
+     * @return the buffer graphics
+     */
     public static Graphics2D getBufferGraphics() {
         return getInstanceFromThread().getBufferGraphics();
     }
 
+    /**
+     * Draw.
+     *
+     * @param shape the shape
+     */
     public static void draw(final ZenShape shape) {
         shape.colorAndDraw();
     }
 
+    /**
+     * Draw image.
+     *
+     * @param filename the filename
+     * @param x the x
+     * @param y the y
+     */
     public static void drawImage(final String filename, final int x,
             final int y) {
         getInstanceFromThread().drawImage(filename, x, y);
     }
 
+    /**
+     * Draw line.
+     *
+     * @param x1 the x 1
+     * @param y1 the y 1
+     * @param x2 the x 2
+     * @param y2 the y 2
+     */
     public static void drawLine(final int x1, final int y1, final int x2,
             final int y2) {
         getInstanceFromThread().drawLine(x1, y1, x2, y2);
     }
 
+    /**
+     * Draw polygon.
+     *
+     * @param x the x
+     * @param y the y
+     */
     public static void drawPolygon(final int[] x, final int[] y) {
         getInstanceFromThread().drawPolygon(x, y);
     }
 
+    /**
+     * Draw text.
+     *
+     * @param text the text
+     * @param x the x
+     * @param y the y
+     */
     public static void drawText(final String text, final int x, final int y) {
         getInstanceFromThread().drawText(text, x, y);
 
     }
 
+    /**
+     * Draw arc.
+     *
+     * @param x the x
+     * @param y the y
+     * @param width the width
+     * @param height the height
+     * @param startAngle the start angle
+     * @param arcAngle the arc angle
+     */
     public static void drawArc(final int x, final int y, final int width,
             final int height, final int startAngle, final int arcAngle) {
         getInstanceFromThread().drawArc(x, y, width, height, startAngle,
                 arcAngle);
     }
 
+    /**
+     * Fill oval.
+     *
+     * @param minX the min X
+     * @param minY the min Y
+     * @param width the width
+     * @param height the height
+     */
     public static void fillOval(final int minX, final int minY, final int width,
             final int height) {
         getInstanceFromThread().fillOval(minX, minY, width, height);
     }
 
+    /**
+     * Fill rect.
+     *
+     * @param x1 the x 1
+     * @param y1 the y 1
+     * @param width the width
+     * @param height the height
+     */
     public static void fillRect(final int x1, final int y1, final int width,
             final int height) {
         getInstanceFromThread().fillRect(x1, y1, width, height);
     }
 
+    /**
+     * Fill polygon.
+     *
+     * @param x the x
+     * @param y the y
+     */
     public static void fillPolygon(final int[] x, final int[] y) {
         getInstanceFromThread().fillPolygon(x, y);
     }
 
+    /**
+     * Sets the background.
+     *
+     * @param color the new background
+     */
     public static void setBackground(final String color) {
         if (color != null) {
             Zen.setColor(color);
-            Zen.fillRect(0, 0, Zen.width, Zen.height);
+            Zen.fillRect(0, 0, Zen.myWidth, Zen.myHeight);
         }
     }
 
+    /**
+     * Sets the color.
+     *
+     * @param color the new color
+     */
     public static void setColor(final String color) {
         if (color != null && colorMap.containsKey(color.toLowerCase())) {
             int c = colorMap.get(color.toLowerCase());
@@ -581,11 +909,26 @@ public class Zen extends JApplet {
         }
     }
 
+    /**
+     * Sets the color.
+     *
+     * @param red the red
+     * @param green the green
+     * @param blue the blue
+     */
     public static void setColor(final int red, final int green,
             final int blue) {
         getInstanceFromThread().setColor(red, green, blue);
     }
 
+    /**
+     * Bound.
+     *
+     * @param value the value
+     * @param min the min
+     * @param max the max
+     * @return the int
+     */
     public static int bound(final int value, final int min, final int max) {
         if (value < min) {
             return min;
@@ -596,44 +939,86 @@ public class Zen extends JApplet {
         return value;
     }
 
+    /**
+     * Gets the random number.
+     *
+     * @param max the max
+     * @return the random number
+     */
     public static int getRandomNumber(final int max) {
         return (int) (Math.random() * max + 1);
     }
 
+    /**
+     * Gets the random number.
+     *
+     * @param min the min
+     * @param max the max
+     * @return the random number
+     */
     public static int getRandomNumber(final int min, final int max) {
         return (int) (min + Math.random() * (max - min + 1));
     }
 
+    /**
+     * Sets the font.
+     *
+     * @param fontname the fontname
+     * @param size the size
+     * @return the font
+     */
     public static Font setFont(final String fontname, final int size) {
         return Zen.setFont(fontname + "-" + size);
     }
 
+    /**
+     * Sets the font.
+     *
+     * @param fontname the fontname
+     * @return the font
+     */
     public static Font setFont(final String fontname) {
         return getInstanceFromThread().setFont(fontname);
     }
 
+    /**
+     * Gets the cached image.
+     *
+     * @param filename the filename
+     * @return the cached image
+     */
     public static Image getCachedImage(final String filename) {
         return getInstanceFromThread().getCachedImage(filename);
     }
 
+    /**
+     * Buffer.
+     *
+     * @param ms the ms
+     */
     public static void buffer(final int ms) {
         Zen.flipBuffer();
         Zen.sleep(ms);
     }
 
+    /**
+     * Flip buffer.
+     */
     public static void flipBuffer() {
         getInstanceFromThread().flipBuffer();
     }
 
-    /*
-     * ----------------- Instance Methods -------------------------
+    /**
+     * The Class ZenInstance.
      */
+
     class ZenInstance {
+        private final int MOUSE_WAIT_LENGTH_MS = 250;
         public void waitForClick() {
             long t = mouseClickTime;
             // Todo: remove polling and use synchronization wait lock
             while (isRunning && t == mouseClickTime) {
-                sleep(250);
+                sleep(MOUSE_WAIT_LENGTH_MS);
             }
         }
 
@@ -833,7 +1218,7 @@ public class Zen extends JApplet {
         }
 
         void createBuffers(final int width, final int height,
-                final String options) {
+                final String passedOptions) {
             if (g != null) {
                 g.dispose();
             }
@@ -843,7 +1228,10 @@ public class Zen extends JApplet {
             if (backImageBuffer != null) {
                 backImageBuffer.flush();
             }
-            options = options != null ? options.toLowerCase() : "";
+            String options = "";
+            if (passedOptions != null) {
+                options = passedOptions.toLowerCase();
+            }
             bufferSize = new Dimension(width, height);
             stretchToFit = options.contains("stretch");
 
@@ -891,11 +1279,17 @@ public class Zen extends JApplet {
 
     }; // End class ZenMaster
 
+    /** The instance map. */
     /*
      * --------------------- IMPLEMENTATION ----------------------
      */
     private static ThreadLocal<ZenInstance> instanceMap = new ThreadLocal<ZenInstance>();
 
+    /**
+     * Gets the instance from thread.
+     *
+     * @return the instance from thread
+     */
     private static synchronized ZenInstance getInstanceFromThread() {
         ZenInstance instance = instanceMap.get();
         return instance != null
@@ -904,44 +1298,93 @@ public class Zen extends JApplet {
                         DEFAULT_OPTIONS);
     }
 
+    /** The must be an application. */
     private static boolean mustBeAnApplication; // true if create called init
+
+    /** The must be an web applet. */
     private static boolean mustBeAnWebApplet; // true if init called before
+
+    /** The master. */
     // create
     private ZenInstance master = new ZenInstance();
 
+    /** The g. */
     private Graphics2D g;
+
+    /** The front image buffer. */
     private Image backImageBuffer, frontImageBuffer;
+
+    /** The name to image. */
     private Map<String, Image> nameToImage = Collections
             .synchronizedMap(new HashMap<String, Image>());
 
+    /** The stretch to fit. */
     private boolean stretchToFit;
+
+    /** The key pressed. */
     private boolean[] keyPressed = new boolean[256];
+
+    /** The virtual key pressed. */
     private boolean[] virtualKeyPressed = new boolean[1024];
 
+    /** The mouse Y. */
     private int mouseX, mouseY, mouseClickX, mouseClickY;
+
+    /** The mouse click time. */
     private long mouseClickTime;
+
+    /** The is mouse clicked. */
     private boolean isMouseClicked;
+
+    /** The edit text. */
     private StringBuilder editText = new StringBuilder();
+
+    /** The buffer size. */
     private Dimension bufferSize = new Dimension(DEFAULT_SIZE);
+
+    /** The buffer options. */
     private String bufferOptions = DEFAULT_OPTIONS;
+
+    /** The current color. */
     private Color currentColor = Color.WHITE;
+
+    /** The current font. */
     private Font currentFont = Font.decode("Times-18");
+
+    /** The mouse buttons and modifier keys. */
     private int mouseButtonsAndModifierKeys;
+
+    /** The is running. */
     private boolean isRunning = true;
+
+    /** The main thread. */
     private Thread mainThread;
+
+    /** The window width. */
     private int paintAtX, paintAtY, windowWidth, windowHeight;
+
+    /** The paint immediately. */
     protected boolean paintImmediately;
 
+    /* (non-Javadoc)
+     * @see java.awt.Container#getMinimumSize()
+     */
     @Override
     public final Dimension getMinimumSize() {
         return bufferSize;
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.Container#getPreferredSize()
+     */
     @Override
     public final Dimension getPreferredSize() {
         return getMinimumSize();
     }
 
+    /* (non-Javadoc)
+     * @see java.applet.Applet#init()
+     */
     // JApplet methods
     @Override
     public final void init() {
@@ -967,6 +1410,9 @@ public class Zen extends JApplet {
         });
     }
 
+    /* (non-Javadoc)
+     * @see java.applet.Applet#stop()
+     */
     @Override
     @SuppressWarnings("deprecation")
     public final void stop() {
@@ -982,6 +1428,9 @@ public class Zen extends JApplet {
         mainThread = null;
     }
 
+    /* (non-Javadoc)
+     * @see java.applet.Applet#start()
+     */
     @Override
     public final void start() {
         master.createBuffers(bufferSize.width, bufferSize.height,
@@ -1030,16 +1479,25 @@ public class Zen extends JApplet {
         }
     }
 
+    /* (non-Javadoc)
+     * @see java.applet.Applet#destroy()
+     */
     @Override
     public final void destroy() {
         super.destroy();
     }
 
+    /* (non-Javadoc)
+     * @see javax.swing.JApplet#update(java.awt.Graphics)
+     */
     @Override
     public final void update(final Graphics windowGraphics) {
         paint(windowGraphics);
     }
 
+    /* (non-Javadoc)
+     * @see java.awt.Container#paint(java.awt.Graphics)
+     */
     @Override
     public final void paint(final Graphics windowGraphics) {
         if (windowGraphics == null) {
@@ -1085,6 +1543,9 @@ public class Zen extends JApplet {
         }
     } // paint
 
+    /**
+     * Paint window immediately.
+     */
     private void paintWindowImmediately() {
         Graphics windowGraphics = getGraphics();
         // IE8 windowGraphics is not null
@@ -1099,6 +1560,7 @@ public class Zen extends JApplet {
         }
     }
 
+    /** The key listener. */
     private KeyListener keyListener = new KeyAdapter() {
         @Override
         public void keyPressed(final KeyEvent e) {
@@ -1136,6 +1598,8 @@ public class Zen extends JApplet {
             }
         }
     }; // KeyListener
+
+    /** The mouse listener. */
     private MouseListener mouseListener = new MouseAdapter() {
         @Override
         public void mouseClicked(final MouseEvent me) {
@@ -1164,6 +1628,8 @@ public class Zen extends JApplet {
         }
 
     }; // MouseListener
+
+    /** The mouse motion listener. */
     private MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
         @Override
         public void mouseMoved(final MouseEvent me) {
@@ -1186,5 +1652,5 @@ public class Zen extends JApplet {
             mouseListener.mouseClicked(e);
             mouseMoved(e);
         }
-    }; // MouseMotionListener
-};// End of class
+    };
+}
