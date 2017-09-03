@@ -1,8 +1,23 @@
-apply plugin: 'java-library'
-apply plugin: 'maven'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+        classpath fileTree(dir: 'libs', include: '*.jar')
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'
+
+shadowJar {
+    classifier = null
+}
 
 dependencies {
-  compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
-group = 'com.github.cs125-illinois'
+jar.finalizedBy(shadowJar)
 
+// vim: ts=4:sw=4:et:ft=groovy

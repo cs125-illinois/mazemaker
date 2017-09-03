@@ -27,7 +27,6 @@ public class Line extends ZenShape {
 	public void draw() {
 		if (thickness > 1) {
 			double dy = end.rawY() - rawY();
-			double dx = end.rawX() - rawX();
 			if (dy != 0) {
 				double theta = angleTo(end);
 				int xr = (int) (Math.sin(theta) * thickness / 2), yr = (int) (Math.cos(theta) * thickness / 2);
