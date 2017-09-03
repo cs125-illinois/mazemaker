@@ -1,6 +1,5 @@
 package edu.illinois.cs.cs125.lib.zen;
 
-// TODO: Auto-generated Javadoc
 /**
  * Zen circle class.
  */
@@ -84,8 +83,8 @@ public class Circle extends ZenShape {
         this.setDiameter(diameter);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Draw the circle.
      *
      * @see edu.illinois.cs.cs125.lib.zen.ZenShape#draw()
      */
