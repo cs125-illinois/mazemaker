@@ -1,6 +1,8 @@
 apply plugin: 'java-library'
+apply plugin: 'maven'
 
 dependencies {
   compile fileTree(dir: 'libs', include: '*.jar')
 }
+group = 'com.github.cs125-illinois'
 
