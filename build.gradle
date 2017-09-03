@@ -10,6 +10,9 @@ buildscript {
 
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.github.cs125-illinois'
 
 shadowJar {
     classifier = null
