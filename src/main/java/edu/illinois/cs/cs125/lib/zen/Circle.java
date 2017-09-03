@@ -83,11 +83,10 @@ public class Circle extends ZenShape {
         this.setDiameter(diameter);
     }
 
-    /**
-     * Draw the circle.
-     *
+    /* (non-Javadoc)
      * @see edu.illinois.cs.cs125.lib.zen.ZenShape#draw()
      */
+    @Override
     public final void draw() {
         Zen.fillOval(getX() - getDiameter() / 2, getY() - getDiameter() / 2,
                 getDiameter(), getDiameter());
