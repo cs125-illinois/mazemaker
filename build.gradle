@@ -3,4 +3,9 @@ apply plugin: 'maven'
 
 group = 'com.github.cs125-illinois'
 
+javadoc {
+  source = sourceSets.main.allJava
+  destinationDir = file('docs')
+}
+
 // vim: ts=4:sw=4:et:ft=groovy
