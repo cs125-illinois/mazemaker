@@ -1118,12 +1118,12 @@ public class Zen extends JApplet {
          * @return the cached image
          */
         public Image getCachedImage(final String filename) {
-            Image img = nameToImage.get("../" + filename);
+            Image img = nameToImage.get(filename);
             if (img != null) {
                 return img;
             }
             try {
-                InputStream is = Zen.class.getResourceAsStream("../" + filename);
+                InputStream is = Zen.class.getResourceAsStream(filename);
                 img = ImageIO.read(is);
                 is.close();
                 nameToImage.put(filename, img);
