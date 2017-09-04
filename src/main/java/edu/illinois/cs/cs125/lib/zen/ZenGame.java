@@ -2,41 +2,87 @@ package edu.illinois.cs.cs125.lib.zen;
 
 import java.util.ArrayList;
 
+/**
+ * Zen game class.
+ */
 public abstract class ZenGame {
 
-    private int width = 500, height = 500, fps = 30;
-    private boolean running = false;
-    private String name = "Zen";
+    /** Default width. */
+    private static final int DEFAULT_WIDTH = 500;
 
-    private ArrayList<ZenSprite> sprites;
+    /** Default height. */
+    private static final int DEFAULT_HEIGHT = 500;
 
+    /** Default frames-per-second. */
+    private static final int DEFAULT_FPS = 30;
+
+    /** My width, height, and frames per second. */
+    private int myWidth = DEFAULT_WIDTH, myHeight = DEFAULT_HEIGHT, myFPS = DEFAULT_FPS;
+
+    /** Am I running? */
+    private boolean currentlyRunning = false;
+
+    /** My name. */
+    private String myName = "Zen";
+
+    /** My sprites. */
+    private ArrayList<ZenSprite> mySprites;
+
+    /**
+     * Setup.
+     */
     public abstract void setup();
+
+    /**
+     * Loop.
+     */
     public abstract void loop();
 
+    /**
+     * Set the game frames-per-second (FPS).
+     *
+     * @param fps the new FPS
+     */
     public final void setFPS(final int fps) {
-        this.fps = fps;
+        this.myFPS = fps;
     }
 
+    /**
+     * Set the game name.
+     *
+     * @param name the new name
+     */
     public final void setName(final String name) {
-        this.name = name;
+        this.myName = name;
     }
 
+    /**
+     * Set the game size.
+     *
+     * @param width the new width
+     * @param height the new height
+     */
     public final void setSize(final int width, final int height) {
-        this.width = width;
-        this.height = height;
+        this.myWidth = width;
+        this.myHeight = height;
     }
 
+    /**
+     * Adds a sprite to the game.
+     *
+     * @param sprite the sprite to add
+     */
     public final void addSprite(final ZenSprite sprite) {
-        if (sprites != null) {
-            if (sprites.size() == 0) {
-                sprites.add(sprite);
+        if (mySprites != null) {
+            if (mySprites.size() == 0) {
+                mySprites.add(sprite);
             } else {
-                for (int i = 0; i < sprites.size(); i++) {
-                    if (sprites.get(i).getLayer() > sprite.getLayer()) {
-                        sprites.add(i, sprite);
+                for (int i = 0; i < mySprites.size(); i++) {
+                    if (mySprites.get(i).getLayer() > sprite.getLayer()) {
+                        mySprites.add(i, sprite);
                         break;
-                    } else if (i + 1 == sprites.size()) {
-                        sprites.add(sprite);
+                    } else if (i + 1 == mySprites.size()) {
+                        mySprites.add(sprite);
                         break;
                     }
                 }
@@ -45,26 +91,32 @@ public abstract class ZenGame {
         }
     }
 
+    /**
+     * Clear all game sprites.
+     */
     public final void clearSprites() {
-        if (sprites != null) {
-            sprites.clear();
+        if (mySprites != null) {
+            mySprites.clear();
         }
     }
 
+    /**
+     * Run the game.
+     */
     public final void run() {
-        if (!running) {
-            sprites = new ArrayList<ZenSprite>();
-            Zen.setWindowName(name);
-            Zen.create(width, height);
-            running = true;
+        if (!currentlyRunning) {
+            mySprites = new ArrayList<ZenSprite>();
+            Zen.setWindowName(myName);
+            Zen.create(myWidth, myHeight);
+            currentlyRunning = true;
             setup();
             while (true) {
                 loop();
-                for (ZenSprite sprite : sprites) {
+                for (ZenSprite sprite : mySprites) {
                     sprite.move();
                     sprite.draw();
                 }
-                Zen.buffer(1000 / fps);
+                Zen.buffer(1000 / myFPS);
             }
         }
     }
