@@ -36,7 +36,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
-// TODO: Auto-generated Javadoc
 /**
  * Zen library.
  */

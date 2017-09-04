@@ -9,14 +9,14 @@ public class Circle extends ZenShape {
     private int myDiameter;
 
     /**
-     * Instantiates a new circle at location (0, 0) with diameter 1.
+     * Draw a new black circle at location (0, 0) with diameter 1.
      */
     public Circle() {
         this(0, 0, 1, null);
     }
 
     /**
-     * Instantiates a new circle with diameter 1.
+     * Draw a new black circle with diameter 1.
      *
      * @param x the x location of the circle
      * @param y the y location of the circle
@@ -26,7 +26,7 @@ public class Circle extends ZenShape {
     }
 
     /**
-     * Instantiates a new circle at (0, 0).
+     * Draw a new black circle at location (0, 0).
      *
      * @param diameter the diameter of the circle
      */
@@ -35,8 +35,7 @@ public class Circle extends ZenShape {
     }
 
     /**
-     * Instantiates a new circle at location (0, 0).
-     * color.
+     * Draw a new circle at location (0, 0).
      *
      * @param diameter the diameter of the circle
      * @param color the color of the circle
@@ -46,7 +45,7 @@ public class Circle extends ZenShape {
     }
 
     /**
-     * Instantiates a new circle with diameter 1.
+     * Draw a new circle with diameter 1.
      *
      * @param x the x location of the circle
      * @param y the y location of the circle
@@ -57,7 +56,7 @@ public class Circle extends ZenShape {
     }
 
     /**
-     * Instantiates a new circle.
+     * Draw a new black circle.
      *
      * @param x the x location of the circle
      * @param y the y location of the circle
@@ -68,7 +67,7 @@ public class Circle extends ZenShape {
     }
 
     /**
-     * Instantiates a new circle.
+     * Draw a new circle.
      *
      * @param x the x
      * @param y the y

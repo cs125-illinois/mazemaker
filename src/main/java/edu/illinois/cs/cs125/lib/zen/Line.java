@@ -1,18 +1,18 @@
 package edu.illinois.cs.cs125.lib.zen;
 
 /**
- * The Class Line.
+ * Zen line class.
  */
 public class Line extends ZenShape {
 
-    /** The end. */
-    private Point end;
+    /** The line end. */
+    private Point myEnd;
 
-    /** The thickness. */
+    /** The line thickness. */
     private int myThickness = 1;
 
     /**
-     * Instantiates a new line.
+     * Draw a new black line with thickness 1.
      *
      * @param x1 the x 1
      * @param y1 the y 1
@@ -24,7 +24,7 @@ public class Line extends ZenShape {
     }
 
     /**
-     * Instantiates a new line.
+     * Draw a new black line.
      *
      * @param x1 the x 1
      * @param y1 the y 1
@@ -38,7 +38,7 @@ public class Line extends ZenShape {
     }
 
     /**
-     * Instantiates a new line.
+     * Draw a new line with thickness 1.
      *
      * @param x1 the x 1
      * @param y1 the y 1
@@ -52,7 +52,7 @@ public class Line extends ZenShape {
     }
 
     /**
-     * Instantiates a new line.
+     * Draw a new line.
      *
      * @param x1 the x 1
      * @param y1 the y 1
@@ -65,7 +65,7 @@ public class Line extends ZenShape {
             final int thickness, final String color) {
         this.setX(x1);
         this.setY(y1);
-        this.end = new Point(x2, y2);
+        this.myEnd = new Point(x2, y2);
         this.myThickness = thickness;
         this.setColor(color);
     }
@@ -76,60 +76,60 @@ public class Line extends ZenShape {
     @Override
     public final void draw() {
         if (myThickness > 1) {
-            double dy = end.rawY() - rawY();
+            double dy = myEnd.rawY() - rawY();
             if (dy != 0) {
-                double theta = angleTo(end);
+                double theta = angleTo(myEnd);
                 int xr = (int) (Math.sin(theta) * myThickness / 2),
                         yr = (int) (Math.cos(theta) * myThickness / 2);
                 Zen.fillPolygon(
-                        new int[]{this.getX() + xr, end.getX() + xr,
-                                end.getX() - xr, this.getX() - xr},
-                        new int[]{this.getY() - yr, end.getY() - yr,
-                                end.getY() + yr, this.getY() + yr});
+                        new int[]{this.getX() + xr, myEnd.getX() + xr,
+                                myEnd.getX() - xr, this.getX() - xr},
+                        new int[]{this.getY() - yr, myEnd.getY() - yr,
+                                myEnd.getY() + yr, this.getY() + yr});
             } else {
                 Zen.fillPolygon(new int[]{this.getX() + myThickness / 2,
-                        end.getX() + myThickness / 2, end.getX() - myThickness / 2,
+                        myEnd.getX() + myThickness / 2, myEnd.getX() - myThickness / 2,
                         this.getX() - myThickness / 2},
-                        new int[]{this.getY(), end.getY(), end.getY(),
+                        new int[]{this.getY(), myEnd.getY(), myEnd.getY(),
                                 this.getY()});
             }
 
         } else {
-            Zen.drawLine(getX(), getY(), end.getX(), end.getY());
+            Zen.drawLine(getX(), getY(), myEnd.getX(), myEnd.getY());
         }
     }
 
     /**
-     * Rotate.
+     * Rotate the line.
      *
-     * @param degrees the degrees
+     * @param degrees the degrees to rotate
      */
     public final void rotate(final double degrees) {
-        double length = distanceTo(end);
-        double theta = angleTo(end) + Math.toRadians(degrees);
-        end.set(Math.cos(theta) * length + rawX(),
+        double length = distanceTo(myEnd);
+        double theta = angleTo(myEnd) + Math.toRadians(degrees);
+        myEnd.set(Math.cos(theta) * length + rawX(),
                 Math.sin(theta) * length + rawY());
     }
 
     /**
-     * Rotate to.
+     * Rotate the line to a certain degrees.
      *
-     * @param degrees the degrees
+     * @param degrees the degrees to rotate to
      */
     public final void rotateTo(final double degrees) {
-        double length = distanceTo(end);
+        double length = distanceTo(myEnd);
         double theta = Math.toRadians(degrees);
-        end.set(Math.cos(theta) * length + rawX(),
+        myEnd.set(Math.cos(theta) * length + rawX(),
                 Math.sin(theta) * length + rawY());
     }
 
     /**
-     * Angle.
+     * Get the line angle.
      *
      * @return the double
      */
     public final double angle() {
-        return angleTo(end);
+        return angleTo(myEnd);
     }
 
     /* (non-Javadoc)
@@ -138,7 +138,7 @@ public class Line extends ZenShape {
     @Override
     public final void changeX(final int amount) {
         setX(getX() + amount);
-        end.changeX(amount);
+        myEnd.changeX(amount);
     }
 
     /* (non-Javadoc)
@@ -147,61 +147,61 @@ public class Line extends ZenShape {
     @Override
     public final void changeY(final int amount) {
         setY(getY() + amount);
-        end.changeY(amount);
+        myEnd.changeY(amount);
     }
 
     /**
-     * End.
+     * Get the line end point.
      *
-     * @return the point
+     * @return the end point
      */
     public final Point end() {
-        return this.end;
+        return this.myEnd;
     }
 
     /**
-     * Sets the end.
+     * Sets the line end point.
      *
-     * @param x2 the x 2
-     * @param y2 the y 2
+     * @param x2 the x coordinate of the end
+     * @param y2 the y coordinate of the end
      */
     public final void setEnd(final int x2, final int y2) {
-        this.end.set(x2, y2);
+        this.myEnd.set(x2, y2);
     }
 
     /**
-     * Sets the end X.
+     * Sets the end X coordinate.
      *
-     * @param x2 the new end X
+     * @param x2 the new end Y coordinate
      */
     public final void setEndX(final int x2) {
-        this.end.setX(x2);
+        this.myEnd.setX(x2);
     }
 
     /**
-     * Gets the end X.
+     * Gets the end X coordinate.
      *
-     * @return the end X
+     * @return the end X coordinate
      */
     public final int getEndX() {
-        return this.end.getX();
+        return this.myEnd.getX();
     }
 
     /**
-     * Sets the end Y.
+     * Sets the end Y coordinate.
      *
-     * @param y2 the new end Y
+     * @param y2 the new end Y coordinate
      */
     public final void setEndY(final int y2) {
-        this.end.setY(y2);
+        this.myEnd.setY(y2);
     }
 
     /**
-     * Gets the end Y.
+     * Gets the end Y coordinate.
      *
-     * @return the end Y
+     * @return the end Y coordinate
      */
     public final int getEndY() {
-        return this.end.getY();
+        return this.myEnd.getY();
     }
 }

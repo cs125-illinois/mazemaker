@@ -1,7 +1,7 @@
 package edu.illinois.cs.cs125.lib.zen;
 
 /**
- * The Class Image.
+ * Zen image class.
  */
 public class Image extends ZenShape {
 

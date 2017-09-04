@@ -1,5 +1,5 @@
 /**
- * Zen: A Simple Java Graphics Library.
+ * Zen: A Simple Java Graphics Library
  *
  * Originally written by Lawrence Angrave, later extended by Sasha Jaffarove,
  * and cleaned up, recovered to its original state, and published by Geoffrey Challen.
