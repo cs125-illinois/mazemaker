@@ -7,5 +7,19 @@ javadoc {
   source = sourceSets.main.allJava
   destinationDir = file('docs')
 }
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
 
 // vim: ts=4:sw=4:et:ft=groovy
