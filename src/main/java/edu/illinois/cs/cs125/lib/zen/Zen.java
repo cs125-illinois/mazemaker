@@ -94,7 +94,6 @@ public class Zen extends JApplet {
      */
     public static ZenInstance create(final int width, final int height, final String options) {
         if (!windowInitialized) {
-            initialize();
             Zen.myWidth = width;
             Zen.myHeight = height;
         }
@@ -212,10 +211,9 @@ public class Zen extends JApplet {
     }
 
     /**
-     * Initialize a Zen window.
+     * Static initialization. This ensures that it always gets done.
      */
-    @SuppressWarnings("checkstyle:methodlength")
-    private static void initialize() {
+    static {
         keyMap = new HashMap<String, Integer>();
         keyMap.put("space", KeyEvent.VK_SPACE);
         keyMap.put("left", KeyEvent.VK_LEFT);
