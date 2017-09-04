@@ -21,6 +21,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -1123,7 +1124,7 @@ public class Zen extends JApplet {
                 return img;
             }
             try {
-                InputStream is = Zen.class.getResourceAsStream(filename);
+                InputStream is = new FileInputStream(filename);
                 img = ImageIO.read(is);
                 is.close();
                 nameToImage.put(filename, img);
