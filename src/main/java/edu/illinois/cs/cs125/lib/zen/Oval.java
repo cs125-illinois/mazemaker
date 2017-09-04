@@ -9,7 +9,7 @@ public class Oval extends ZenShape {
     private int myWidth, myHeight;
 
     /**
-     * Draw a new black oval at location (0, 0).
+     * Draw a new oval at location (0, 0) using the current color.
      *
      * @param width the width
      * @param height the height
@@ -30,7 +30,7 @@ public class Oval extends ZenShape {
     }
 
     /**
-     * Draw a new black oval.
+     * Draw a new oval using the current color.
      *
      * @param x the x
      * @param y the y

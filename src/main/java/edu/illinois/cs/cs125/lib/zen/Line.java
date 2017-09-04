@@ -12,7 +12,7 @@ public class Line extends ZenShape {
     private int myThickness = 1;
 
     /**
-     * Draw a new black line with thickness 1.
+     * Draw a new line with thickness 1 using the current color.
      *
      * @param x1 the x 1
      * @param y1 the y 1
@@ -24,7 +24,7 @@ public class Line extends ZenShape {
     }
 
     /**
-     * Draw a new black line.
+     * Draw a new line using the current color.
      *
      * @param x1 the x 1
      * @param y1 the y 1

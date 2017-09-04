@@ -6,7 +6,7 @@ package edu.illinois.cs.cs125.lib.zen;
 public class Triangle extends Polygon {
 
     /**
-     * Draw a new black triangle from three points.
+     * Draw a new triangle from three points using the current color.
      *
      * @param p1 the first corner point
      * @param p2 the second corner point
@@ -29,7 +29,7 @@ public class Triangle extends Polygon {
     }
 
     /**
-     * Draw a new black triangle from six coordinates.
+     * Draw a new triangle from six coordinates using the current color.
      *
      * @param x1 the first corner X coordinate
      * @param y1 the first corner Y coordinate
@@ -44,7 +44,7 @@ public class Triangle extends Polygon {
     }
 
     /**
-     * Draw a new black triangle from six coordinates.
+     * Draw a new triangle from six coordinates using the current color.
      *
      * @param x1 the first corner X coordinate
      * @param y1 the first corner Y coordinate

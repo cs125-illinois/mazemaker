@@ -9,7 +9,7 @@ public class Polygon extends ZenShape {
     private int[] myX, myY;
 
     /**
-     * Draw a new black polygon at (0, 0) from an array of points.
+     * Draw a new polygon at (0, 0) from an array of points using the current color.
      *
      * @param points the array of points.
      */
@@ -28,7 +28,7 @@ public class Polygon extends ZenShape {
     }
 
     /**
-     * Draw a new black polygon.
+     * Draw a new polygon using the current color.
      *
      * @param x the X coordinate
      * @param y the Y coordinate

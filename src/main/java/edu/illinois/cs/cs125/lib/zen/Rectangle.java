@@ -9,7 +9,7 @@ public class Rectangle extends ZenShape {
     private int myWidth, myHeight;
 
     /**
-     * Draw a new black rectangle at (0, 0).
+     * Draw a new rectangle at (0, 0) using the current color.
      *
      * @param width the rectangle's width
      * @param height the rectangle's height
@@ -30,7 +30,7 @@ public class Rectangle extends ZenShape {
     }
 
     /**
-     * Draw a new black rectangle.
+     * Draw a new rectangle using the current color.
      *
      * @param x the X coordinate
      * @param y the Y coordinate
