@@ -32,8 +32,7 @@ public class Line extends ZenShape {
      * @param y2 the y 2
      * @param thickness the thickness
      */
-    public Line(final int x1, final int y1, final int x2, final int y2,
-            final int thickness) {
+    public Line(final int x1, final int y1, final int x2, final int y2, final int thickness) {
         this(x1, y1, x2, y2, thickness, null);
     }
 
@@ -46,8 +45,7 @@ public class Line extends ZenShape {
      * @param y2 the y 2
      * @param color the color
      */
-    public Line(final int x1, final int y1, final int x2, final int y2,
-            final String color) {
+    public Line(final int x1, final int y1, final int x2, final int y2, final String color) {
         this(x1, y1, x2, y2, 1, color);
     }
 
@@ -61,8 +59,8 @@ public class Line extends ZenShape {
      * @param thickness the thickness
      * @param color the color
      */
-    public Line(final int x1, final int y1, final int x2, final int y2,
-            final int thickness, final String color) {
+    public Line(final int x1, final int y1, final int x2, final int y2, final int thickness,
+            final String color) {
         this.setX(x1);
         this.setY(y1);
         this.myEnd = new Point(x2, y2);
@@ -70,7 +68,9 @@ public class Line extends ZenShape {
         this.setColor(color);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see edu.illinois.cs.cs125.lib.zen.ZenShape#draw()
      */
     @Override
@@ -82,16 +82,15 @@ public class Line extends ZenShape {
                 int xr = (int) (Math.sin(theta) * myThickness / 2),
                         yr = (int) (Math.cos(theta) * myThickness / 2);
                 Zen.fillPolygon(
-                        new int[]{this.getX() + xr, myEnd.getX() + xr,
-                                myEnd.getX() - xr, this.getX() - xr},
-                        new int[]{this.getY() - yr, myEnd.getY() - yr,
-                                myEnd.getY() + yr, this.getY() + yr});
+                        new int[]{this.getX() + xr, myEnd.getX() + xr, myEnd.getX() - xr,
+                                this.getX() - xr},
+                        new int[]{this.getY() - yr, myEnd.getY() - yr, myEnd.getY() + yr,
+                                this.getY() + yr});
             } else {
-                Zen.fillPolygon(new int[]{this.getX() + myThickness / 2,
-                        myEnd.getX() + myThickness / 2, myEnd.getX() - myThickness / 2,
-                        this.getX() - myThickness / 2},
-                        new int[]{this.getY(), myEnd.getY(), myEnd.getY(),
-                                this.getY()});
+                Zen.fillPolygon(
+                        new int[]{this.getX() + myThickness / 2, myEnd.getX() + myThickness / 2,
+                                myEnd.getX() - myThickness / 2, this.getX() - myThickness / 2},
+                        new int[]{this.getY(), myEnd.getY(), myEnd.getY(), this.getY()});
             }
 
         } else {
@@ -107,8 +106,7 @@ public class Line extends ZenShape {
     public final void rotate(final double degrees) {
         double length = distanceTo(myEnd);
         double theta = angleTo(myEnd) + Math.toRadians(degrees);
-        myEnd.set(Math.cos(theta) * length + rawX(),
-                Math.sin(theta) * length + rawY());
+        myEnd.set(Math.cos(theta) * length + rawX(), Math.sin(theta) * length + rawY());
     }
 
     /**
@@ -119,8 +117,7 @@ public class Line extends ZenShape {
     public final void rotateTo(final double degrees) {
         double length = distanceTo(myEnd);
         double theta = Math.toRadians(degrees);
-        myEnd.set(Math.cos(theta) * length + rawX(),
-                Math.sin(theta) * length + rawY());
+        myEnd.set(Math.cos(theta) * length + rawX(), Math.sin(theta) * length + rawY());
     }
 
     /**
@@ -132,7 +129,9 @@ public class Line extends ZenShape {
         return angleTo(myEnd);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see edu.illinois.cs.cs125.lib.zen.Point#changeX(int)
      */
     @Override
@@ -141,7 +140,9 @@ public class Line extends ZenShape {
         myEnd.changeX(amount);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see edu.illinois.cs.cs125.lib.zen.Point#changeY(int)
      */
     @Override

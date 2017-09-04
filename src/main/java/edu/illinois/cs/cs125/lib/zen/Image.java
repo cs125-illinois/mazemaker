@@ -29,7 +29,9 @@ public class Image extends ZenShape {
         this.set(x, y);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see edu.illinois.cs.cs125.lib.zen.ZenShape#draw()
      */
     @Override

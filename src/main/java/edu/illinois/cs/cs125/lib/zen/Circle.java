@@ -74,21 +74,22 @@ public class Circle extends ZenShape {
      * @param diameter the diameter
      * @param color the color
      */
-    public Circle(final int x, final int y, final int diameter,
-            final String color) {
+    public Circle(final int x, final int y, final int diameter, final String color) {
         setX(x);
         setY(y);
         setColor(color);
         this.setDiameter(diameter);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see edu.illinois.cs.cs125.lib.zen.ZenShape#draw()
      */
     @Override
     public final void draw() {
-        Zen.fillOval(getX() - getDiameter() / 2, getY() - getDiameter() / 2,
-                getDiameter(), getDiameter());
+        Zen.fillOval(getX() - getDiameter() / 2, getY() - getDiameter() / 2, getDiameter(),
+                getDiameter());
     }
 
     /**

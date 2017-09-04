@@ -58,13 +58,14 @@ public class Oval extends ZenShape {
         this.setHeight(height);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see edu.illinois.cs.cs125.lib.zen.ZenShape#draw()
      */
     @Override
     public final void draw() {
-        Zen.fillOval(getX() - getWidth() / 2, getY() - getHeight() / 2,
-                getWidth(), getHeight());
+        Zen.fillOval(getX() - getWidth() / 2, getY() - getHeight() / 2, getWidth(), getHeight());
     }
 
     /**

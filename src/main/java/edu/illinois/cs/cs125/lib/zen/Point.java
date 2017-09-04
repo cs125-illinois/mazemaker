@@ -1,40 +1,51 @@
 package edu.illinois.cs.cs125.lib.zen;
 
 /**
- * A Point is a precise point in 2D space.
+ * Zen point class.
  *
- * It uses doubles to store precise values for the x and y coordinate, and casts
- * them to integers for use in the graphic systems integer plane. This allows
- * for more complex transformations like rotating and scaling to take place.
+ * A point is a precise location in 2D space. It uses doubles to store precise values for the x and
+ * y coordinate, and casts them to integers for use in the graphic systems integer plane. This
+ * allows for more complex transformations like rotating and scaling to take place.
  */
 public class Point {
-    private double x, y; // The x, y coordinate of this point
+
+    /** My X and Y coordinates. */
+    private double myX, myY;
 
     /**
-     * Empty constructor, initializes to the point 0, 0.
+     * Create a point at (0, 0).
      */
     public Point() {
         this(0, 0);
     }
 
     /**
-     * Integer value constructor.
+     * Create a point at integer coordinates (x, y).
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
      */
     public Point(final int x, final int y) {
-        this.x = x;
-        this.y = y;
+        this.myX = x;
+        this.myY = y;
     }
 
     /**
-     * Precise value constructor.
+     * Create a point at floating point coordinates (x, y).
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
      */
     public Point(final double x, final double y) {
-        this.x = x;
-        this.y = y;
+        this.myX = x;
+        this.myY = y;
     }
 
     /**
-     * Set the position to a new (x, y) coordinate.
+     * Set new integer (x, y) coordinates.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
      */
     public void set(final int x, final int y) {
         setX(x);
@@ -42,7 +53,10 @@ public class Point {
     }
 
     /**
-     * Set the position to a new (x, y) coordinate.
+     * Set new floating point (x, y) coordinates.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
      */
     public void set(final double x, final double y) {
         setX(x);
@@ -50,7 +64,10 @@ public class Point {
     }
 
     /**
-     * Change the position in the x direction by dx, and the y direction by dy.
+     * Move the point by integers dx and dy.
+     *
+     * @param dx the shift in the X coordinate
+     * @param dy the shift in the Y coordinate
      */
     public void change(final int dx, final int dy) {
         changeX(dx);
@@ -58,7 +75,10 @@ public class Point {
     }
 
     /**
-     * Change the position in the x direction by dx, and the y direction by dy.
+     * Move the point by floating points dx and dy.
+     *
+     * @param dx the shift in the X coordinate
+     * @param dy the shift in the Y coordinate
      */
     public void change(final double dx, final double dy) {
         changeX(dx);
@@ -66,121 +86,154 @@ public class Point {
     }
 
     /**
-     * Returns the integer part of the x position.
+     * Returns the X coordinate as an integer.
+     *
+     * @return the X coordinate
      */
     public int getX() {
-        return (int) x;
+        return (int) myX;
     }
 
     /**
-     * Returns the precise x position.
+     * Returns the X coordinate as a float.
+     *
+     * @return the X coordinate
      */
     public double rawX() {
-        return x;
+        return myX;
     }
 
     /**
-     * Sets the x position to the specified value.
+     * Sets the X coordinate as an integer.
+     *
+     * @param x the new X coordinate
      */
     public void setX(final int x) {
-        this.x = x;
+        this.myX = x;
     }
 
     /**
-     * Sets the x position to the specified value.
+     * Sets the X coordinate as a float.
+     *
+     * @param x the new X coordinate
      */
     public void setX(final double x) {
-        this.x = x;
+        this.myX = x;
     }
 
     /**
-     * Changes the x position by the given amount.
+     * Move the X coordinate by integer dx.
+     *
+     * @param dx the shift in the X coordinate
      */
-    public void changeX(final int amount) {
-        this.x += amount;
+    public void changeX(final int dx) {
+        this.myX += dx;
     }
 
     /**
-     * Changes the x position by the given amount.
+     * Move the X coordinate by float dx.
+     *
+     * @param dx the shift in the X coordinate
      */
-    public void changeX(final double amount) {
-        this.x += amount;
+    public void changeX(final double dx) {
+        this.myX += dx;
     }
 
     /**
-     * Returns the integer part of the y value of this point.
+     * Returns the Y coordinate as an integer.
+     *
+     * @return the Y coordinate
      */
     public int getY() {
-        return (int) y;
+        return (int) myY;
     }
 
     /**
-     * Returns the precise y position of this point.
+     * Returns the Y coordinate is a float.
+     *
+     * @return the Y coordinate
      */
     public double rawY() {
-        return y;
+        return myY;
     }
 
     /**
-     * Sets the y position to the specified value.
+     * Sets the Y coordinate as an integer.
+     *
+     * @param y the new Y coordinate
      */
     public void setY(final int y) {
-        this.y = y;
+        this.myY = y;
     }
 
     /**
-     * Sets the y position to the specified value.
+     * Sets the Y coordinate as a float.
+     *
+     * @param y the new Y coordinate
      */
     public void setY(final double y) {
-        this.y = y;
+        this.myY = y;
     }
 
     /**
-     * Changes the y position by the given amount.
+     * Move the Y coordinate by integer dy.
+     *
+     * @param dy the shift in the Y coordinate
      */
-    public void changeY(final int amount) {
-        this.y += amount;
+    public void changeY(final int dy) {
+        this.myY += dy;
     }
 
     /**
-     * Changes the y position by the given amount.
+     * Move the Y coordinate by float dy.
+     *
+     * @param dy the shift in the Y coordinate
      */
-    public void changeY(final double amount) {
-        this.y += amount;
+    public void changeY(final double dy) {
+        this.myY += dy;
     }
 
     /**
-     * Returns the distance between this point and another point.
+     * Return the distance between this point and another point.
+     *
+     * @param other the other point
+     * @return the distance between the two points
      */
     public double distanceTo(final Point other) {
-        return Math.sqrt(
-                Math.pow(this.x - other.x, 2) + Math.pow(this.y - other.y, 2));
+        return Math.sqrt(Math.pow(this.myX - other.myX, 2) + Math.pow(this.myY - other.myY, 2));
     }
 
     /**
-     * Returns the angle formed by the line from this point to another point.
+     * Return the angle formed by the line from this point to another point.
+     *
+     * @param other the other point
+     * @return the angle formed by the line between the two points
      */
+    @SuppressWarnings("checkstyle:avoidinlineconditionals")
     public double angleTo(final Point other) {
-        double dy = other.y - this.y;
-        double dx = other.x - this.x;
+        double dy = other.myY - this.myY;
+        double dx = other.myX - this.myX;
         return ((dx != 0)
-                ? Math.atan(dy / dx)
-                        + ((dx < 0) ? Math.PI : ((dy < 0) ? 2 * Math.PI : 0))
+                ? Math.atan(dy / dx) + ((dx < 0) ? Math.PI : ((dy < 0) ? 2 * Math.PI : 0))
                 : ((dx > 0) ? Math.PI / 2 : -Math.PI / 2));
     }
 
     /**
-     * Returns whether this point represents the same 2D coordinate as another
-     * point.
+     * Returns whether this point is equal to another point.
+     *
+     * @param other the other point
+     * @return boolean whether the two points are the same
      */
     public boolean equals(final Point other) {
-        return this.x == other.x && this.y == other.y;
+        return this.myX == other.myX && this.myY == other.myY;
     }
 
     /**
-     * Returns a String representation of this point.
+     * Returns a string representation of this point as "(X, Y)".
+     *
+     * @return the string representation of this point
      */
     public String toString() {
-        return "(" + this.x + ", " + this.y + ")";
+        return "(" + this.myX + ", " + this.myY + ")";
     }
 }
