@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Zen</name>
-	<comment>Zen graphics library packaged for CS 125.</comment>
+	<name>Mazemaker</name>
+	<comment>Mazemaker library for CS 125.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
