@@ -13,21 +13,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Maze {
 
     /**
-     * Exception for dimension configuration problems.
-     */
-    public static final class DimensionException extends Exception {
-
-        /**
-         * Generate a new dimension exception.
-         *
-         * @param message the message
-         */
-        DimensionException(final String message) {
-            super(message);
-        }
-    }
-
-    /**
      * Exception for bad direction inputs.
      */
     public static final class DirectionException extends Exception {
@@ -42,20 +27,6 @@ public class Maze {
         }
     }
 
-    /**
-     * Exception for errors during maze validation.
-     */
-    public static final class ValidationException extends Exception {
-
-        /**
-         * Create a new validation exception.
-         *
-         * @param message the message
-         */
-        ValidationException(final String message) {
-            super(message);
-        }
-    }
     /**
      * Exception for bad locations.
      */
@@ -410,20 +381,19 @@ public class Maze {
      * @throws ValidationException the validation exception
      * @throws DimensionException the dimension exception
      */
-    public Maze(final int mazeXDimension, final int mazeYDimension)
-            throws ValidationException, DimensionException {
+    public Maze(final int mazeXDimension, final int mazeYDimension) {
 
         myXDimension = mazeXDimension;
         myYDimension = mazeYDimension;
 
         if (myXDimension < 1) {
-            throw new DimensionException("xDimension too small");
+            throw new IllegalArgumentException("xDimension too small");
         }
         if (myYDimension < 1) {
-            throw new DimensionException("yDimension too small");
+            throw new IllegalArgumentException("yDimension too small");
         }
         if (myXDimension * myYDimension <= 1) {
-            throw new DimensionException("combined dimensions too small");
+            throw new IllegalArgumentException("combined dimensions too small");
         }
 
         maze = new Cell[myXDimension][myYDimension];
@@ -455,7 +425,7 @@ public class Maze {
 
         while (unvisitedCount > 0) {
             if (path.empty()) {
-                throw new ValidationException("path should not be empty");
+                throw new IllegalStateException("path should not be empty");
             }
 
             currentCell = path.peek();
@@ -477,12 +447,12 @@ public class Maze {
 
             Cell nextCell = nextCells.get(ThreadLocalRandom.current().nextInt(0, nextCells.size()));
             if (currentCell.getBorder(nextCell.relativeDirection) == false) {
-                throw new ValidationException("current cell should not have this border");
+                throw new IllegalStateException("current cell should not have this border");
             }
             currentCell.clearBorder(nextCell.relativeDirection);
             String oppositeDirection = OPPOSITEDIRECTIONS.get(nextCell.relativeDirection);
             if (nextCell.getBorder(oppositeDirection) == false) {
-                throw new ValidationException("next cell should not have this border");
+                throw new IllegalStateException("next cell should not have this border");
             }
             nextCell.clearBorder(oppositeDirection);
 
@@ -493,23 +463,23 @@ public class Maze {
             for (int y = 0; y < myYDimension; y++) {
                 Cell cell = maze[x][y];
                 if (y == myYDimension - 1 && cell.getBorder("up") == false) {
-                    throw new ValidationException("top row should have this border");
+                    throw new IllegalStateException("top row should have this border");
                 }
                 if (y == 0 && cell.getBorder("down") == false) {
-                    throw new ValidationException("bottom row should have this border");
+                    throw new IllegalStateException("bottom row should have this border");
                 }
                 if (x == myXDimension - 1 && cell.getBorder("right") == false) {
-                    throw new ValidationException("right column should have this border");
+                    throw new IllegalStateException("right column should have this border");
                 }
                 if (x == 0 && cell.getBorder("left") == false) {
-                    throw new ValidationException("left column should have this border");
+                    throw new IllegalStateException("left column should have this border");
                 }
                 for (Map.Entry<String, Cell> entry : cell.neighbors.entrySet()) {
                     Cell neighbor = entry.getValue();
                     String direction = entry.getKey();
                     String oppositeDirection = OPPOSITEDIRECTIONS.get(direction);
                     if (cell.getBorder(direction) != neighbor.getBorder(oppositeDirection)) {
-                        throw new ValidationException("mismatched neigbor borders");
+                        throw new IllegalStateException("mismatched neigbor borders");
                     }
                 }
             }
@@ -518,9 +488,6 @@ public class Maze {
 
     /** The user's current X, Y location. */
     private Location currentLocation;
-
-    /** The maze's end location. */
-    private Location endLocation;
 
     /**
      * Start the maze at a specific location.
@@ -565,6 +532,9 @@ public class Maze {
         return currentLocation;
     }
 
+    /** The maze's end location. */
+    private Location endLocation;
+
     /**
      * End the maze at a specific location.
      *
@@ -606,5 +576,85 @@ public class Maze {
      */
     public Location getEndLocation() {
         return endLocation;
+    }
+
+    /** The current movement direction. */
+    private String currentDirection = "up";
+
+    /**
+     * Attempt to move forward in the given direction. Returns true if the move succeeded, and false
+     * if a wall is in the way.
+     *
+     * @return true if the move completed, false if it did not
+     */
+    public boolean move() {
+        Cell currentCell = maze[currentLocation.x()][currentLocation.y()];
+        if (currentCell.getBorder(currentDirection)) {
+            return false;
+        } else {
+            currentLocation = currentLocation.add(MOVEMENTS.get(currentDirection).getD());
+            return true;
+        }
+    }
+
+    /**
+     * Return if you can move in the current direction.
+     *
+     * @return true if you can, false if a wall is in the way
+     */
+    public boolean test() {
+        Cell currentCell = maze[currentLocation.x()][currentLocation.y()];
+        return currentCell.getBorder(currentDirection);
+    }
+
+    /**
+     * Turn left.
+     */
+    @SuppressWarnings("checkstyle:missingswitchdefault")
+    public void turnLeft() {
+        switch (currentDirection) {
+            case "up":
+                currentDirection = "left";
+                break;
+            case "left":
+                currentDirection = "down";
+                break;
+            case "down":
+                currentDirection = "right";
+                break;
+            case "right":
+                currentDirection = "up";
+                break;
+        }
+    }
+
+    /**
+     * Turn right.
+     */
+    @SuppressWarnings("checkstyle:missingswitchdefault")
+    public void turnRight() {
+        switch (currentDirection) {
+            case "up":
+                currentDirection = "right";
+                break;
+            case "right":
+                currentDirection = "down";
+                break;
+            case "down":
+                currentDirection = "left";
+                break;
+            case "left":
+                currentDirection = "up";
+                break;
+        }
+    }
+
+    /**
+     * Return true when you have completed the maze.
+     *
+     * @return true if you are at the maze end point, false otherwise
+     */
+    public boolean isFinished() {
+        return currentLocation == endLocation;
     }
 }

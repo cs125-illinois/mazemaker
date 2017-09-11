@@ -6,10 +6,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import edu.illinois.cs.cs125.lib.mazemaker.Maze;
-import edu.illinois.cs.cs125.lib.mazemaker.Maze.DimensionException;
 import edu.illinois.cs.cs125.lib.mazemaker.Maze.Location;
 import edu.illinois.cs.cs125.lib.mazemaker.Maze.LocationException;
-import edu.illinois.cs.cs125.lib.mazemaker.Maze.ValidationException;
 
 /**
  * Test the maze class.
@@ -18,12 +16,9 @@ public class TestMaze {
 
     /**
      * Test that we can create a maze.
-     *
-     * @throws DimensionException
-     * @throws ValidationException
      */
     @Test
-    public void testMazeCreation() throws ValidationException, DimensionException {
+    public void testMazeCreation() {
 
         for (int i = 0; i < 10; i++) {
             int randomX = ThreadLocalRandom.current().nextInt(80, 100);
@@ -42,19 +37,19 @@ public class TestMaze {
         try {
             maze = new Maze(-1, 10);
             fail();
-        } catch (ValidationException | DimensionException e) {
+        } catch (IllegalArgumentException e) {
             Assert.assertNull(maze);
         }
         try {
             maze = new Maze(10, -1);
             fail();
-        } catch (ValidationException | DimensionException e) {
+        } catch (IllegalArgumentException e) {
             Assert.assertNull(maze);
         }
         try {
             maze = new Maze(1, 1);
             fail();
-        } catch (ValidationException | DimensionException e) {
+        } catch (IllegalArgumentException e) {
             Assert.assertNull(maze);
         }
     }
@@ -62,13 +57,10 @@ public class TestMaze {
     /**
      * Test basic location setting and getting.
      *
-     * @throws ValidationException the validation exception
-     * @throws DimensionException the dimension exception
-     * @throws LocationException the location exception
+     *  @throws LocationException the location exception
      */
     @Test
-    public void testBasicLocations()
-            throws ValidationException, DimensionException, LocationException {
+    public void testBasicLocations() throws LocationException {
         for (int i = 0; i < 10; i++) {
             int randomX = ThreadLocalRandom.current().nextInt(80, 100);
             int randomY = ThreadLocalRandom.current().nextInt(80, 100);
@@ -92,18 +84,68 @@ public class TestMaze {
                 maze.endAtTopRight();
                 Assert.assertEquals(maze.getCurrentLocation(),
                         new Location(randomX - 1, randomY - 1));
+                Assert.assertFalse(maze.isFinished());
 
                 randomLocationX = ThreadLocalRandom.current().nextInt(0, randomX);
                 randomLocationY = ThreadLocalRandom.current().nextInt(0, randomY);
                 maze.endAt(randomLocationX, randomLocationY);
                 Assert.assertEquals(maze.getEndLocation(),
                         new Location(randomLocationX, randomLocationY));
+                Assert.assertFalse(maze.isFinished());
 
                 maze.endAtRandomLocation();
                 Assert.assertNotEquals(maze.getEndLocation(),
                         new Location(randomLocationX, randomLocationY));
+                Assert.assertFalse(maze.isFinished());
 
             }
+        }
+    }
+
+    /**
+     * Test bad locations.
+     */
+    @Test
+    public void testBadLocations() {
+        for (int i = 0; i < 10; i++) {
+            int randomX = ThreadLocalRandom.current().nextInt(80, 100);
+            int randomY = ThreadLocalRandom.current().nextInt(80, 100);
+
+            Maze maze = new Maze(randomX, randomY);
+
+            try {
+                maze.startAt(-1, randomY);
+                fail();
+            } catch (LocationException e) { }
+            try {
+                maze.startAt(randomY, -1);
+                fail();
+            } catch (LocationException e) { }
+            try {
+                maze.startAt(randomX + 1, randomY);
+                fail();
+            } catch (LocationException e) { }
+            try {
+                maze.startAt(randomX, randomY + 1);
+                fail();
+            } catch (LocationException e) { }
+
+            try {
+                maze.endAt(-1, randomY);
+                fail();
+            } catch (LocationException e) { }
+            try {
+                maze.endAt(randomY, -1);
+                fail();
+            } catch (LocationException e) { }
+            try {
+                maze.endAt(randomX + 1, randomY);
+                fail();
+            } catch (LocationException e) { }
+            try {
+                maze.endAt(randomX, randomY + 1);
+                fail();
+            } catch (LocationException e) { }
         }
     }
 }
