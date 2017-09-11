@@ -136,6 +136,11 @@ public class Maze {
         public Location add(final Location other) {
             return new Location(x + other.x, y + other.y);
         }
+
+        @Override
+        public final String toString() {
+            return "(" + x + ", " + y + ")";
+        }
     }
 
     /** Possible movement directions. */
@@ -602,9 +607,9 @@ public class Maze {
      *
      * @return true if you can, false if a wall is in the way
      */
-    public boolean test() {
+    public boolean canMove() {
         Cell currentCell = maze[currentLocation.x()][currentLocation.y()];
-        return currentCell.getBorder(currentDirection);
+        return !currentCell.getBorder(currentDirection);
     }
 
     /**
@@ -655,6 +660,6 @@ public class Maze {
      * @return true if you are at the maze end point, false otherwise
      */
     public boolean isFinished() {
-        return currentLocation == endLocation;
+        return currentLocation.equals(endLocation);
     }
 }
