@@ -93,7 +93,9 @@
 
 		<!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-        <module name="JavadocMethod"/>
+        <module name="JavadocMethod">
+          <property name="allowMissingThrowsTags" value="true"/>
+        </module>
         <module name="JavadocType"/>
         <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
@@ -166,7 +168,8 @@
         <!-- Zen: We need magic numbers for this one. -->
         <!-- <module name="MagicNumber"/> -->
         <module name="MissingSwitchDefault"/>
-        <module name="SimplifyBooleanExpression"/>
+        <!-- Zen: We need magic numbers for this one. -->
+        <!-- <module name="SimplifyBooleanExpression"/> -->
         <module name="SimplifyBooleanReturn"/>
 
         <!-- Checks for class design                         -->

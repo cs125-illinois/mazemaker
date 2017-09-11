@@ -1,4 +1,4 @@
-package edu.illinois.cs.cs125.lib.zen;
+package edu.illinois.cs.cs125.lib.mazemaker;
 
 import java.awt.Color;
 import java.awt.Container;
