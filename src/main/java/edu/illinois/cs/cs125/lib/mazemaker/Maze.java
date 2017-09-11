@@ -15,7 +15,7 @@ public class Maze {
     /**
      * Exception for dimension configuration problems.
      */
-    static final class DimensionException extends Exception {
+    public static final class DimensionException extends Exception {
 
         /**
          * Generate a new dimension exception.
@@ -30,7 +30,7 @@ public class Maze {
     /**
      * Exception for bad direction inputs.
      */
-    static final class DirectionException extends Exception {
+    public static final class DirectionException extends Exception {
 
         /**
          * Create a new direction exception.
@@ -45,7 +45,7 @@ public class Maze {
     /**
      * Exception for errors during maze validation.
      */
-    static final class ValidationException extends Exception {
+    public static final class ValidationException extends Exception {
 
         /**
          * Create a new validation exception.
@@ -313,14 +313,32 @@ public class Maze {
      */
 
     private boolean validCell(final int x, final int y) {
-        return (x >= 0 && x < xDimension && y >= 0 || y < yDimension);
+        return (x >= 0 && x < myXDimension && y >= 0 && y < myYDimension);
     }
 
     /** The x dimension. */
-    private final int xDimension;
+    private final int myXDimension;
+
+    /**
+     * Gets the maze X dimension.
+     *
+     * @return the maze's X dimension
+     */
+    public int getxDimension() {
+        return myXDimension;
+    }
 
     /** The y dimension. */
-    private final int yDimension;
+    private final int myYDimension;
+
+    /**
+     * Gets the maze Y dimension.
+     *
+     * @return the maze's Y dimension
+     */
+    public int getyDimension() {
+        return myYDimension;
+    }
 
     /**
      * Instantiates a new maze.
@@ -333,27 +351,27 @@ public class Maze {
     public Maze(final int mazeXDimension, final int mazeYDimension)
             throws ValidationException, DimensionException {
 
-        xDimension = mazeXDimension;
-        yDimension = mazeYDimension;
+        myXDimension = mazeXDimension;
+        myYDimension = mazeYDimension;
 
-        if (xDimension < 1) {
+        if (myXDimension < 1) {
             throw new DimensionException("xDimension too small");
         }
-        if (yDimension < 1) {
+        if (myYDimension < 1) {
             throw new DimensionException("yDimension too small");
         }
-        if (xDimension * yDimension < 1) {
+        if (myXDimension * myYDimension <= 1) {
             throw new DimensionException("combined dimensions too small");
         }
 
-        maze = new Cell[xDimension][yDimension];
-        for (int x = 0; x < xDimension; x++) {
-            for (int y = 0; y < yDimension; y++) {
+        maze = new Cell[myXDimension][myYDimension];
+        for (int x = 0; x < myXDimension; x++) {
+            for (int y = 0; y < myYDimension; y++) {
                 maze[x][y] = new Cell(x, y);
             }
         }
-        for (int x = 0; x < xDimension; x++) {
-            for (int y = 0; y < yDimension; y++) {
+        for (int x = 0; x < myXDimension; x++) {
+            for (int y = 0; y < myYDimension; y++) {
                 for (Map.Entry<String, Movement> entry : MOVEMENTS.entrySet()) {
                     Movement movement = entry.getValue();
                     int neighborX = movement.getDx() + x;
@@ -366,12 +384,12 @@ public class Maze {
             }
         }
 
-        int randomX = ThreadLocalRandom.current().nextInt(0, xDimension);
-        int randomY = ThreadLocalRandom.current().nextInt(0, yDimension);
+        int randomX = ThreadLocalRandom.current().nextInt(0, myXDimension);
+        int randomY = ThreadLocalRandom.current().nextInt(0, myYDimension);
         Cell currentCell = maze[randomX][randomY];
         Stack<Cell> path = new Stack<Cell>();
         path.push(currentCell);
-        int unvisitedCount = xDimension * yDimension - 1;
+        int unvisitedCount = myXDimension * myYDimension - 1;
 
         while (unvisitedCount > 0) {
             if (path.empty()) {
@@ -409,16 +427,16 @@ public class Maze {
             unvisitedCount--;
             path.add(nextCell);
         }
-        for (int x = 0; x < xDimension; x++) {
-            for (int y = 0; y < yDimension; y++) {
+        for (int x = 0; x < myXDimension; x++) {
+            for (int y = 0; y < myYDimension; y++) {
                 Cell cell = maze[x][y];
-                if (y == yDimension - 1 && cell.getBorder("up") == false) {
+                if (y == myYDimension - 1 && cell.getBorder("up") == false) {
                     throw new ValidationException("top row should have this border");
                 }
                 if (y == 0 && cell.getBorder("down") == false) {
                     throw new ValidationException("bottom row should have this border");
                 }
-                if (x == xDimension - 1 && cell.getBorder("right") == false) {
+                if (x == myXDimension - 1 && cell.getBorder("right") == false) {
                     throw new ValidationException("right column should have this border");
                 }
                 if (x == 0 && cell.getBorder("left") == false) {
