@@ -56,6 +56,20 @@ public class Maze {
             super(message);
         }
     }
+    /**
+     * Exception for bad locations.
+     */
+    public static final class LocationException extends Exception {
+
+        /**
+         * Create a new location exception.
+         *
+         * @param message the message
+         */
+        LocationException(final String message) {
+            super(message);
+        }
+    }
 
     /**
      * Class representing a 2D integer location.
@@ -107,9 +121,49 @@ public class Maze {
          * @param setX the X coordinate
          * @param setY the Y coordinate
          */
-        Location(final int setX, final int setY) {
+        public Location(final int setX, final int setY) {
             x = setX;
             y = setY;
+        }
+
+        @Override
+        public final int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + x;
+            result = prime * result + y;
+            return result;
+        }
+
+        @Override
+        public final boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            Location other = (Location) obj;
+            if (x != other.x) {
+                return false;
+            }
+            if (y != other.y) {
+                return false;
+            }
+            return true;
+        }
+
+        /**
+         * Combine two locations.
+         *
+         * @param other the other
+         * @return the location
+         */
+        public Location add(final Location other) {
+            return new Location(x + other.x, y + other.y);
         }
     }
 
@@ -162,8 +216,7 @@ public class Maze {
          * @param setDirection the set direction
          * @throws DirectionException
          */
-        Movement(final Location setD, final String setDirection)
-                throws DirectionException {
+        Movement(final Location setD, final String setDirection) throws DirectionException {
             d = setD;
             if (!(Arrays.asList(DIRECTIONS).contains(setDirection))) {
                 throw new DirectionException(setDirection + " is not a valid direction");
@@ -272,7 +325,7 @@ public class Maze {
          * @param neighbor the cell to set as a neighbor
          */
         public void setNeighbor(final String direction, final Cell neighbor) {
-            this.neighbors.put(direction,  neighbor);
+            this.neighbors.put(direction, neighbor);
         }
 
         /** Relative direction using during maze construction. */
@@ -317,13 +370,12 @@ public class Maze {
     /**
      * Create a new maze object with the specified dimensions.
      *
-     * @param x the x
-     * @param y the y
+     * @param location the location to check
      * @return true, if successful
      */
-
-    private boolean validCell(final int x, final int y) {
-        return (x >= 0 && x < myXDimension && y >= 0 && y < myYDimension);
+    private boolean validLocation(final Location location) {
+        return (location.x() >= 0 && location.x() < myXDimension && location.y() >= 0
+                && location.y() < myYDimension);
     }
 
     /** The x dimension. */
@@ -384,12 +436,12 @@ public class Maze {
             for (int y = 0; y < myYDimension; y++) {
                 for (Map.Entry<String, Movement> entry : MOVEMENTS.entrySet()) {
                     Movement movement = entry.getValue();
-                    int neighborX = movement.getD().x() + x;
-                    int neighborY = movement.getD().y() + y;
-                    if (!(validCell(neighborX, neighborY))) {
+                    Location neighborLocation = maze[x][y].getLocation().add(movement.getD());
+                    if (!(validLocation(neighborLocation))) {
                         continue;
                     }
-                    maze[x][y].setNeighbor(movement.direction, maze[neighborX][neighborY]);
+                    maze[x][y].setNeighbor(movement.direction,
+                            maze[neighborLocation.x()][neighborLocation.y()]);
                 }
             }
         }
@@ -465,35 +517,94 @@ public class Maze {
     }
 
     /** The user's current X, Y location. */
-    private int myXLocation, myYLocation;
+    private Location currentLocation;
+
+    /** The maze's end location. */
+    private Location endLocation;
 
     /**
      * Start the maze at a specific location.
      *
-     * @param xLocation the x location
-     * @param yLocation the y location
+     * @param x the starting X coordinate
+     * @param y the starting Y coordinate
+     * @throws LocationException
      */
-    public void startAt(final int xLocation, final int yLocation) {
-        myXLocation = xLocation;
-        myYLocation = yLocation;
+    public void startAt(final int x, final int y) throws LocationException {
+        Location potentialLocation = new Location(x, y);
+        if (!validLocation(potentialLocation)) {
+            throw new LocationException("can't set maze end at invalid location");
+        }
+        currentLocation = potentialLocation;
     }
 
     /**
      * Start the maze at (0, 0).
      */
     public void startAtZero() {
-        myXLocation = 0;
-        myYLocation = 0;
+        currentLocation = new Location(0, 0);
     }
 
     /**
      * Start the maze at a random location.
      */
     public void startAtRandomLocation() {
-        int newXLocation, newYLocation;
+        Location newLocation;
         do {
-            newXLocation = ThreadLocalRandom.current().nextInt(0, myXDimension);
-            newYLocation = ThreadLocalRandom.current().nextInt(0, myYDimension);
-        } while (newXLocation == myXLocation || newYLocation == myYLocation);
+            newLocation = new Location(ThreadLocalRandom.current().nextInt(0, myXDimension),
+                    ThreadLocalRandom.current().nextInt(0, myYDimension));
+        } while (currentLocation == newLocation);
+        currentLocation = newLocation;
+    }
+
+    /**
+     * Get the current location.
+     *
+     * @return the current location
+     */
+    public Location getCurrentLocation() {
+        return currentLocation;
+    }
+
+    /**
+     * End the maze at a specific location.
+     *
+     * @param x the starting X coordinate
+     * @param y the starting Y coordinate
+     * @throws LocationException
+     */
+    public void endAt(final int x, final int y) throws LocationException {
+        Location potentialLocation = new Location(x, y);
+        if (!validLocation(potentialLocation)) {
+            throw new LocationException("can't set maze end at invalid location");
+        }
+        currentLocation = new Location(x, y);
+    }
+
+    /**
+     * End the maze at the top right corner.
+     */
+    public void endAtTopRight() {
+        currentLocation = new Location(myXDimension - 1, myYDimension - 1);
+    }
+
+    /**
+     * End the maze at a random location.
+     */
+    public void endAtRandomLocation() {
+        Location newLocation;
+        do {
+            newLocation = new Location(ThreadLocalRandom.current().nextInt(0, myXDimension),
+                    ThreadLocalRandom.current().nextInt(0, myYDimension));
+        } while (endLocation == newLocation);
+        endLocation = newLocation;
+    }
+
+    /**
+     * Get the end location.
+     *
+     * @return the current location
+     */
+    public Location getEndLocation() {
+        return endLocation;
     }
 }
