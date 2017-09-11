@@ -57,6 +57,62 @@ public class Maze {
         }
     }
 
+    /**
+     * Class representing a 2D integer location.
+     */
+    public static class Location {
+
+        /** My X and Y coordinates. */
+        private int x, y;
+
+        /**
+         * Get my X coordinate.
+         *
+         * @return my X coordinate
+         */
+        public int x() {
+            return x;
+        }
+
+        /**
+         * Sets my X coordinate.
+         *
+         * @param setX my new X coordinate
+         */
+        public void setX(final int setX) {
+            this.x = setX;
+        }
+
+        /**
+         * Get my Y coordinate.
+         *
+         * @return my Y coordinate
+         */
+        public int y() {
+            return y;
+        }
+
+        /**
+         * Sets my Y coordinate.
+         *
+         * @param setY my new Y coordinate
+         */
+        public void setY(final int setY) {
+            this.y = setY;
+        }
+
+        /**
+         * Create a new location.
+         *
+         * @param setX the X coordinate
+         * @param setY the Y coordinate
+         */
+        Location(final int setX, final int setY) {
+            x = setX;
+            y = setY;
+        }
+    }
+
     /** Possible movement directions. */
     public static final String[] DIRECTIONS = {new String("up"), new String("right"),
             new String("down"), new String("left")};
@@ -67,45 +123,15 @@ public class Maze {
     static class Movement {
 
         /** The change in the X value. */
-        private int dx;
-
-        /** The change in the Y value. */
-        private int dy;
+        private Location d;
 
         /**
-         * Get the change in X value.
+         * Get the change in location.
          *
          * @return the change in the X value
          */
-        public int getDx() {
-            return dx;
-        }
-
-        /**
-         * Sets the change in the X value.
-         *
-         * @param newDx the new change in X value
-         */
-        public void setDx(final int newDx) {
-            this.dx = newDx;
-        }
-
-        /**
-         * Gets the change in Y value.
-         *
-         * @return the change in Y value
-         */
-        public int getDy() {
-            return dy;
-        }
-
-        /**
-         * Sets the change in the Y value.
-         *
-         * @param newDy the new change in Y value
-         */
-        public void setDy(final int newDy) {
-            this.dy = newDy;
+        public Location getD() {
+            return d;
         }
 
         /**
@@ -132,15 +158,13 @@ public class Maze {
         /**
          * Instantiates a new movement.
          *
-         * @param setDx the set dx
-         * @param setDy the set dy
+         * @param setD the change in location
          * @param setDirection the set direction
          * @throws DirectionException
          */
-        Movement(final int setDx, final int setDy, final String setDirection)
+        Movement(final Location setD, final String setDirection)
                 throws DirectionException {
-            dx = setDx;
-            dy = setDy;
+            d = setD;
             if (!(Arrays.asList(DIRECTIONS).contains(setDirection))) {
                 throw new DirectionException(setDirection + " is not a valid direction");
             }
@@ -156,10 +180,10 @@ public class Maze {
     static {
         MOVEMENTS = new HashMap<String, Movement>();
         try {
-            MOVEMENTS.put("up", new Movement(0, 1, "up"));
-            MOVEMENTS.put("down", new Movement(0, -1, "down"));
-            MOVEMENTS.put("right", new Movement(1, 0, "right"));
-            MOVEMENTS.put("left", new Movement(-1, 0, "left"));
+            MOVEMENTS.put("up", new Movement(new Location(0, 1), "up"));
+            MOVEMENTS.put("down", new Movement(new Location(0, -1), "down"));
+            MOVEMENTS.put("right", new Movement(new Location(1, 0), "right"));
+            MOVEMENTS.put("left", new Movement(new Location(-1, 0), "left"));
         } catch (DirectionException e) {
             e.printStackTrace();
         }
@@ -176,28 +200,16 @@ public class Maze {
      */
     class Cell {
 
-        /** The cell's X coordinate. */
-        private final int x;
+        /** The cell's location. */
+        private final Location location;
 
         /**
-         * Get the cell's X coordinate.
+         * Gets cell's location.
          *
-         * @return the X coordinate
+         * @return the location
          */
-        public int getX() {
-            return x;
-        }
-
-        /** The Y coordinate. */
-        private final int y;
-
-        /**
-         * Gets the cell's Y coordinate.
-         *
-         * @return the Y coordinate
-         */
-        public int getY() {
-            return y;
+        public Location getLocation() {
+            return location;
         }
 
         /** Whether we have visited the cell during maze construction. */
@@ -287,12 +299,10 @@ public class Maze {
         /**
          * Instantiates a new cell.
          *
-         * @param setX the set X
-         * @param setY the set Y
+         * @param setLocation the cell's location
          */
-        Cell(final int setX, final int setY) {
-            x = setX;
-            y = setY;
+        Cell(final Location setLocation) {
+            location = setLocation;
             borders = new HashMap<String, Boolean>();
             for (String direction : DIRECTIONS) {
                 borders.put(direction, true);
@@ -367,15 +377,15 @@ public class Maze {
         maze = new Cell[myXDimension][myYDimension];
         for (int x = 0; x < myXDimension; x++) {
             for (int y = 0; y < myYDimension; y++) {
-                maze[x][y] = new Cell(x, y);
+                maze[x][y] = new Cell(new Location(x, y));
             }
         }
         for (int x = 0; x < myXDimension; x++) {
             for (int y = 0; y < myYDimension; y++) {
                 for (Map.Entry<String, Movement> entry : MOVEMENTS.entrySet()) {
                     Movement movement = entry.getValue();
-                    int neighborX = movement.getDx() + x;
-                    int neighborY = movement.getDy() + y;
+                    int neighborX = movement.getD().x() + x;
+                    int neighborY = movement.getD().y() + y;
                     if (!(validCell(neighborX, neighborY))) {
                         continue;
                     }
@@ -452,5 +462,38 @@ public class Maze {
                 }
             }
         }
+    }
+
+    /** The user's current X, Y location. */
+    private int myXLocation, myYLocation;
+
+    /**
+     * Start the maze at a specific location.
+     *
+     * @param xLocation the x location
+     * @param yLocation the y location
+     */
+    public void startAt(final int xLocation, final int yLocation) {
+        myXLocation = xLocation;
+        myYLocation = yLocation;
+    }
+
+    /**
+     * Start the maze at (0, 0).
+     */
+    public void startAtZero() {
+        myXLocation = 0;
+        myYLocation = 0;
+    }
+
+    /**
+     * Start the maze at a random location.
+     */
+    public void startAtRandomLocation() {
+        int newXLocation, newYLocation;
+        do {
+            newXLocation = ThreadLocalRandom.current().nextInt(0, myXDimension);
+            newYLocation = ThreadLocalRandom.current().nextInt(0, myYDimension);
+        } while (newXLocation == myXLocation || newYLocation == myYLocation);
     }
 }
