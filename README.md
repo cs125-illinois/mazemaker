@@ -13,6 +13,6 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 dependencies {
-    compile 'com.github.cs125-illinois:Zen:0.5'
+    compile 'com.github.cs125-illinois:zen:0.5'
 }
 ```
