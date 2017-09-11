@@ -89,6 +89,20 @@ public class TestMaze {
                 Assert.assertNotEquals(maze.getCurrentLocation(),
                         new Location(randomLocationX, randomLocationY));
 
+                maze.endAtTopRight();
+                Assert.assertEquals(maze.getCurrentLocation(),
+                        new Location(randomX - 1, randomY - 1));
+
+                randomLocationX = ThreadLocalRandom.current().nextInt(0, randomX);
+                randomLocationY = ThreadLocalRandom.current().nextInt(0, randomY);
+                maze.endAt(randomLocationX, randomLocationY);
+                Assert.assertEquals(maze.getEndLocation(),
+                        new Location(randomLocationX, randomLocationY));
+
+                maze.endAtRandomLocation();
+                Assert.assertNotEquals(maze.getEndLocation(),
+                        new Location(randomLocationX, randomLocationY));
+
             }
         }
     }

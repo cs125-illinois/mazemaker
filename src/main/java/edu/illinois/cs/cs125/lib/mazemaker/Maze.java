@@ -577,7 +577,7 @@ public class Maze {
         if (!validLocation(potentialLocation)) {
             throw new LocationException("can't set maze end at invalid location");
         }
-        currentLocation = new Location(x, y);
+        endLocation = new Location(x, y);
     }
 
     /**
