@@ -29,7 +29,7 @@ public class TestMaze {
     }
 
     /**
-     * Test bad dimensions.
+     * Test bad maze dimensions.
      */
     @Test
     public void testBadDimensions() {
@@ -70,24 +70,30 @@ public class TestMaze {
             Maze maze = new Maze(randomX, randomY);
 
             for (int j = 0; j < 10; j++) {
+
+                // Start at zero
                 maze.startAtZero();
                 Assert.assertEquals(maze.getCurrentLocation(), new Location(0, 0));
 
+                // Start at random given locations
                 int randomLocationX = ThreadLocalRandom.current().nextInt(0, randomX);
                 int randomLocationY = ThreadLocalRandom.current().nextInt(0, randomY);
                 maze.startAt(randomLocationX, randomLocationY);
                 Assert.assertEquals(maze.getCurrentLocation(),
                         new Location(randomLocationX, randomLocationY));
 
+                // Start at a random location
                 maze.startAtRandomLocation();
                 Assert.assertNotEquals(maze.getCurrentLocation(),
                         new Location(randomLocationX, randomLocationY));
 
+                // End at the top right
                 maze.endAtTopRight();
                 Assert.assertEquals(maze.getCurrentLocation(),
                         new Location(randomX - 1, randomY - 1));
                 Assert.assertFalse(maze.isFinished());
 
+                // End at a random given location
                 randomLocationX = ThreadLocalRandom.current().nextInt(0, randomX);
                 randomLocationY = ThreadLocalRandom.current().nextInt(0, randomY);
                 maze.endAt(randomLocationX, randomLocationY);
@@ -95,6 +101,7 @@ public class TestMaze {
                         new Location(randomLocationX, randomLocationY));
                 Assert.assertFalse(maze.isFinished());
 
+                // End at a random location
                 maze.endAtRandomLocation();
                 Assert.assertNotEquals(maze.getEndLocation(),
                         new Location(randomLocationX, randomLocationY));
@@ -115,6 +122,7 @@ public class TestMaze {
 
             Maze maze = new Maze(randomX, randomY);
 
+            // Test various out-of-bounds locations
             try {
                 maze.startAt(-1, randomY);
                 fail();
@@ -171,6 +179,8 @@ public class TestMaze {
         maze.startAtRandomLocation();
         maze.endAtRandomLocation();
 
+        // Solve a small maze using a random walk. Reliably finishing this takes a _large_ number of
+        // steps, even for a small maze.
         for (int steps = 0; steps < 10000000; steps++) {
             if (maze.canMove()) {
                 maze.move();

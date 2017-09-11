@@ -190,7 +190,7 @@ public class Maze {
          *
          * @param setD the change in location
          * @param setDirection the set direction
-         * @throws DirectionException
+         * @throws DirectionException exception if a bad direction is provided
          */
         Movement(final Location setD, final String setDirection) throws DirectionException {
             d = setD;
@@ -383,8 +383,6 @@ public class Maze {
      *
      * @param mazeXDimension the x dimension
      * @param mazeYDimension the y dimension
-     * @throws ValidationException the validation exception
-     * @throws DimensionException the dimension exception
      */
     public Maze(final int mazeXDimension, final int mazeYDimension) {
 
@@ -499,7 +497,7 @@ public class Maze {
      *
      * @param x the starting X coordinate
      * @param y the starting Y coordinate
-     * @throws LocationException
+     * @throws LocationException a location exception the location is invalid
      */
     public void startAt(final int x, final int y) throws LocationException {
         Location potentialLocation = new Location(x, y);
@@ -545,7 +543,7 @@ public class Maze {
      *
      * @param x the starting X coordinate
      * @param y the starting Y coordinate
-     * @throws LocationException
+     * @throws LocationException a location exception the location is invalid
      */
     public void endAt(final int x, final int y) throws LocationException {
         Location potentialLocation = new Location(x, y);
