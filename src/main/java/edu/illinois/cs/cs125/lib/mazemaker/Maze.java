@@ -326,7 +326,7 @@ public class Maze {
         }
 
         /**
-         * Instantiates a new cell.
+         * Create a new cell.
          *
          * @param setLocation the cell's location
          */
@@ -379,7 +379,7 @@ public class Maze {
     }
 
     /**
-     * Instantiates a new maze.
+     * Create a new randomly-generated maze.
      *
      * @param mazeXDimension the x dimension
      * @param mazeYDimension the y dimension
@@ -490,7 +490,7 @@ public class Maze {
     }
 
     /** The user's current X, Y location. */
-    private Location currentLocation;
+    private Location currentLocation = null;
 
     /**
      * Start the maze at a specific location.
@@ -536,7 +536,7 @@ public class Maze {
     }
 
     /** The maze's end location. */
-    private Location endLocation;
+    private Location endLocation = null;
 
     /**
      * End the maze at a specific location.
@@ -557,7 +557,7 @@ public class Maze {
      * End the maze at the top right corner.
      */
     public void endAtTopRight() {
-        currentLocation = new Location(myXDimension - 1, myYDimension - 1);
+        endLocation = new Location(myXDimension - 1, myYDimension - 1);
     }
 
     /**
@@ -616,16 +616,16 @@ public class Maze {
     @SuppressWarnings("checkstyle:missingswitchdefault")
     public void turnLeft() {
         switch (currentDirection) {
-            case "up":
+            case "up" :
                 currentDirection = "left";
                 break;
-            case "left":
+            case "left" :
                 currentDirection = "down";
                 break;
-            case "down":
+            case "down" :
                 currentDirection = "right";
                 break;
-            case "right":
+            case "right" :
                 currentDirection = "up";
                 break;
         }
@@ -637,16 +637,16 @@ public class Maze {
     @SuppressWarnings("checkstyle:missingswitchdefault")
     public void turnRight() {
         switch (currentDirection) {
-            case "up":
+            case "up" :
                 currentDirection = "right";
                 break;
-            case "right":
+            case "right" :
                 currentDirection = "down";
                 break;
-            case "down":
+            case "down" :
                 currentDirection = "left";
                 break;
-            case "left":
+            case "left" :
                 currentDirection = "up";
                 break;
         }
@@ -659,5 +659,60 @@ public class Maze {
      */
     public boolean isFinished() {
         return currentLocation.equals(endLocation);
+    }
+
+    @Override
+    @SuppressWarnings("checkstyle:innerassignment")
+    public final String toString() {
+        String returnString = "";
+        char[][] cellDrawing = new char[2 * myXDimension + 1][2 * myYDimension + 1];
+
+        for (int y = 0; y < 2 * myYDimension; y++) {
+            for (int x = 0; x < 2 * myXDimension; x++) {
+                cellDrawing[x][y] = ' ';
+            }
+        }
+        for (int x = 0; x < myXDimension; x++) {
+            for (int y = 0; y < myYDimension; y++) {
+                int xOffset = 2 * x;
+                int yOffset = 2 * y;
+                if (maze[x][y].getBorder("up")) {
+                    cellDrawing[xOffset][yOffset + 2] =
+                            cellDrawing[xOffset + 1][yOffset + 2] =
+                            cellDrawing[xOffset + 2][yOffset + 2] = '#';
+                }
+                if (maze[x][y].getBorder("right")) {
+                    cellDrawing[xOffset + 2][yOffset] =
+                            cellDrawing[xOffset + 2][yOffset + 1] =
+                            cellDrawing[xOffset + 2][yOffset + 2] = '#';
+                }
+                if (maze[x][y].getBorder("down")) {
+                    cellDrawing[xOffset][yOffset] =
+                            cellDrawing[xOffset + 1][yOffset] =
+                            cellDrawing[xOffset + 2][yOffset] = '#';
+                }
+                if (maze[x][y].getBorder("left")) {
+                    cellDrawing[xOffset][yOffset] =
+                            cellDrawing[xOffset][yOffset + 1] =
+                            cellDrawing[xOffset][yOffset + 2] = '#';
+                }
+                if (x == currentLocation.x() && y == currentLocation.y()) {
+                    cellDrawing[xOffset + 1][yOffset + 1] = 'X';
+                } else if (x == endLocation.x() && y == endLocation.y()) {
+                    cellDrawing[xOffset + 1][yOffset + 1] = 'E';
+                }
+            }
+        }
+        for (int x = 0; x < 2 * myXDimension + 1; x++) {
+            returnString += "#";
+        }
+        returnString += "\n";
+        for (int y = (2 * myYDimension) - 1; y >= 0; y--) {
+            for (int x = 0; x < 2 * myXDimension; x++) {
+                returnString += cellDrawing[x][y];
+            }
+            returnString += "#\n";
+        }
+        return returnString;
     }
 }
